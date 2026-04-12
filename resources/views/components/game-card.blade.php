@@ -15,8 +15,12 @@
                 {{ $juego->titulo }}
             </h5>
 
+            {{--
+                CAMBIO AQUÍ:
+                Usamos \Carbon\Carbon::parse() para convertir el string en fecha
+            --}}
             <p class="card-text small text-secondary">
-                Año: {{ $juego->fecha_lanzamiento->format('Y') }}
+                Año: {{ \Carbon\Carbon::parse($juego->fecha_lanzamiento)->format('Y') }}
             </p>
 
             <p class="mt-auto fw-bold text-light">

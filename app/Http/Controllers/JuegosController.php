@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Juego;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class JuegosController extends Controller
 {
@@ -13,22 +13,26 @@ class JuegosController extends Controller
     public function index()
     {
         /**
-         * Recupera TODOS los registros de la tabla "juegos".
-         * Equivale a: SELECT * FROM juegos;
+         * Traemos todos los juegos que tenemos en la tabla "juegos"
+         * a través del Query Builder.
          *
-         * Devuelve una colección de objetos Juego.
+         * El método get() retorna una Collection.
+         * Cada elemento de esa colección es un objeto con los campos
+         * de cada registro de la tabla.
          */
-        $juegos = Juego::all();
+        $juegos = DB::table('juegos')->get();
 
         /**
-         * Retorna la vista "juegos.index" y le pasa los datos.
+         * Necesitamos pasarle los juegos a la vista.
          *
-         * compact('juegos') es equivalente a:
-         * ['juegos' => $juegos]
+         * El segundo parámetro de view() recibe un array
+         * con las variables que queremos usar en la vista.
          *
-         * En la vista podrás usar:
-         * $juegos
+         * La clave del array será el nombre de la variable
+         * disponible en el Blade.
          */
-        return view('juegos.index', compact('juegos'));
+        return view('juegos.index', [
+            'juegos' => $juegos,
+        ]);
     }
 }
