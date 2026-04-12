@@ -1,0 +1,70 @@
+/* Estructura base */
+html, body, #app {
+    height: 100%;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    background-color: #0d0d0d; /* Negro profundo */
+    color: #e0e0e0;
+}
+
+/* Sobrescritura de Bootstrap para el toque retro */
+.vhs-card {
+    background-color: #1a1a1a !important;
+    border: 3px solid #f0e0d0 !important; /* Borde color etiqueta vieja */
+    transition: transform 0.3s;
+}
+
+.vhs-card:hover {
+    transform: scale(1.05);
+    border-color: #00ffff !important; /* Brillo neón al pasar el ratón */
+    box-shadow: 0 0 15px #ff00ff;
+}
+
+.vhs-btn {
+    border: 2px solid #ff8800 !important;
+    color: #ff8800 !important;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.vhs-btn:hover {
+    background-color: #ff8800 !important;
+    color: #000 !important;
+}
+
+/* Efecto de líneas CRT corregido */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+        to bottom,
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px;
+    z-index: 9999;
+    pointer-events: none; /* Deja pasar los clics hacia la web real */
+}
+
+/* Seguro contra bloqueos de clics en la navegación */
+.navbar {
+    position: relative;
+    z-index: 10000;
+}
+
+/* Link activo del navbar con estética neon guapo */
+.navbar .nav-link.active {
+    color: #ff3355 !important;
+    font-weight: 700;
+    text-shadow:
+        0 0 4px rgba(255, 51, 85, 0.7),
+        0 0 10px rgba(255, 51, 85, 0.45);
+}
+
