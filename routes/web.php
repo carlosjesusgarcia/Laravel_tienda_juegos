@@ -8,7 +8,7 @@ Route::get('/nosotros', [App\Http\Controllers\HomeController::class, 'about']);
 
 Route::get('/login', [App\Http\Controllers\HomeController::class, 'login']);
 
-Route::get('/juegos/listado', [App\Http\Controllers\MoviesController::class, 'index']);
+Route::get('/juegos/listado', [App\Http\Controllers\JuegosController::class, 'index']);
 
 /* Route::get('/', function () {
     return view('welcome');
