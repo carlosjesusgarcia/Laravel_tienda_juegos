@@ -18,10 +18,5 @@ class HomeController extends Controller
         return view('about');
     }
 
-     public function login()
-    {
-        // La vista es el nombre del archivo dentro de la carpeta [resources/views], sin la extensión ni ".php"
-        // ni ".blade.php".
-        return view('login');
-    }
+    // ⚠️ Se eliminó el método login() porque ahora pertenece a AuthController
 }

@@ -1,6 +1,9 @@
+@props(['activeRoute'])
+
 <a
-    class="nav-link {{ request()->is($to) ? 'active' : '' }}" {{ request()->is($to) ? 'aria-current="page"' : '' }}
-    href="{{ url($to) }}"
+    class="nav-link {{ request()->routeIs($activeRoute) ? 'active' : '' }}"
+    {{ request()->routeIs($activeRoute) ? 'aria-current="page"' : '' }}
+    href="{{ route($activeRoute) }}"
 >
     {{ $slot }}
 </a>

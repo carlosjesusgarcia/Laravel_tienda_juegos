@@ -1,0 +1,21 @@
+<x-principal-layout>
+    <x-slot:title>Nuevo Cartucho</x-slot:title>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card bg-black border-danger shadow-lg">
+                    <div class="card-header border-danger bg-dark">
+                        <h2 class="text-danger fw-bold stranger-text mb-0 py-2">
+                            > REGISTRAR NUEVA ENTRADA
+                        </h2>
+                    </div>
+                    <div class="card-body p-4">
+                        {{-- Llamamos al componente --}}
+                        <x-formulario-juego />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-principal-layout>

@@ -9,6 +9,15 @@
         Elige tus cartuchos bajo tu propio riesgo.
     </p>
 
+    {{-- @auth restringe la vista del botón de creación solo a administradores logueados --}}
+    @auth
+        <div class="text-center mb-5">
+            <a href="{{ route('juegos.crear') }}" class="btn btn-vhs-cyan fw-bold px-4">
+                [ REGISTRAR NUEVO JUEGO ]
+            </a>
+        </div>
+    @endauth
+
     <div class="row g-4">
         @forelse ($juegos as $juego)
             <x-game-card :juego="$juego" />
