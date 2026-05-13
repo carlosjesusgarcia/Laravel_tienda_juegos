@@ -14,27 +14,8 @@ class JuegosController extends Controller
      */
     public function index()
     {
-        /**
-         * Traemos todos los juegos que tenemos en la tabla "juegos"
-         * a través del Query Builder.
-         *
-         * El método get() retorna una Collection.
-         * Cada elemento de esa colección es un objeto con los campos
-         *  $juegos = DB::table('juegos')->get();
-         * de cada registro de la tabla.
-         */
+        $juegos = Juego::all();
 
-        $juegos = Juego::all(); // Alternativamente, usando Eloquent ORM
-
-        /**
-         * Necesitamos pasarle los juegos a la vista.
-         *
-         * El segundo parámetro de view() recibe un array
-         * con las variables que queremos usar en la vista.
-         *
-         * La clave del array será el nombre de la variable
-         * disponible en el Blade.
-         */
         return view('juegos.index', [
             'juegos' => $juegos,
         ]);
@@ -47,11 +28,6 @@ class JuegosController extends Controller
      */
     public function detalles(string $id)
     {
-        /**
-         * Búsqueda manual estricta adaptada a URLs amigables (slugs).
-         * firstOrFail() asegura que si el slug no existe, el sistema
-         * devuelva un error 404 de forma segura.
-         */
         $juego = Juego::where('slug', $id)->firstOrFail();
 
         return view('juegos.detalles-juego', [
@@ -61,24 +37,14 @@ class JuegosController extends Controller
 
     public function crear()
     {
-        // Buscamos la vista en resources/views/juegos/crear.blade.php
         return view('juegos.crear');
     }
 
     /**
      * Almacenar un nuevo juego en la base de datos.
-     *
-     * @param  \Illuminate\Http\Request  $request  La petición HTTP entrante con los datos del formulario.
-     * @return \Illuminate\Http\RedirectResponse   Redirige al listado de juegos tras el registro exitoso.
      */
     public function guardar(Request $request)
     {
-        /**
-         * 1. Validación de los datos de entrada.
-         * Se valida que los campos obligatorios estén presentes y cumplan con los formatos requeridos.
-         * Se incluye un segundo array asociativo (clave 'campo.regla') para proveer
-         * mensajes en español.
-         */
         $request->validate([
             'titulo'            => 'required|min:2',
             'precio'            => 'required|numeric',
@@ -93,28 +59,21 @@ class JuegosController extends Controller
             'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
         ]);
 
-        /**
-         * 2. Filtrado de datos.
-         * Se utiliza el método only() para extraer estrictamente los campos permitidos,
-         * previniendo la inyección de datos no deseados en la petición.
-         */
-        $data = $request->only(['titulo', 'precio', 'fecha_lanzamiento', 'sinopsis']);
+        // 1. Extraemos los campos de texto, incluyendo ahora la descripción de la portada
+        $data = $request->only(['titulo', 'precio', 'fecha_lanzamiento', 'sinopsis', 'portada_descripcion']);
 
-        /**
-         * 3. Persistencia de datos mediante Asignación Masiva (Mass Assignment).
-         * Se emplea el método create() de Eloquent para mayor eficiencia. Este método:
-         * - Verifica la propiedad $fillable del modelo por seguridad.
-         * - Dispara el evento 'creating' (previamente configurado en el modelo) para autogenerar el slug.
-         * - Inserta el registro en la base de datos.
-         */
+        // 2. Upload de la imagen. Primero, preguntamos si existe una imagen.
+        if($request->hasFile('portada')) {
+            // Vamos a guardar este archivo en el "disk" configurado del file system (que pusimos en public).
+            // Se guardará dentro de una subcarpeta llamada "portadas".
+            $rutaArchivo = $request->file('portada')->store('portadas');
+
+            // Agregamos este valor generado (ej: "portadas/hashunico.jpg") al array de datos.
+            $data['portada'] = $rutaArchivo;
+        }
+
         Juego::create($data);
 
-        /**
-         * 4. Redirección con notificación de éxito.
-         * Se redirige el flujo al catálogo general.
-         * Se implementa el helper e() por seguridad contra vulnerabilidades XSS,
-         * saneando la entrada del usuario antes de concatenarla con etiquetas HTML sin escapar.
-         */
         return redirect()
             ->route('juegos.listado')
             ->with('feedback.message', 'El cartucho <b>' . e($data['titulo']) . '</b> se guardó con éxito en el archivo.');
@@ -122,15 +81,9 @@ class JuegosController extends Controller
 
     /**
      * Muestra el formulario con los datos cargados para editar.
-     *
-     * @param string $id El slug del juego a editar.
      */
     public function editar(string $id)
     {
-        /**
-         * Adaptación del método del profesor:
-         * Retornamos la vista inyectando el resultado de la búsqueda manual.
-         */
         return view('juegos.editar', [
             'juego' => Juego::where('slug', $id)->firstOrFail(),
         ]);
@@ -138,9 +91,6 @@ class JuegosController extends Controller
 
     /**
      * Procesa la actualización del registro en la base de datos.
-     *
-     * @param Request $request
-     * @param string $id
      */
     public function actualizar(Request $request, string $id)
     {
@@ -160,7 +110,14 @@ class JuegosController extends Controller
             'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
         ]);
 
-        $data = $request->only(['titulo', 'precio', 'fecha_lanzamiento', 'sinopsis']);
+        // Actualizamos la captura de datos igual que en guardar()
+        $data = $request->only(['titulo', 'precio', 'fecha_lanzamiento', 'sinopsis', 'portada_descripcion']);
+
+        // Procesamiento de la nueva imagen si el usuario decidió subir una
+        if($request->hasFile('portada')) {
+            $rutaArchivo = $request->file('portada')->store('portadas');
+            $data['portada'] = $rutaArchivo;
+        }
 
         $juego->update($data);
 
@@ -171,18 +128,9 @@ class JuegosController extends Controller
 
     /**
      * Muestra la pantalla de confirmación antes de eliminar un registro.
-     *
-     * @param  string $id El identificador único del juego a eliminar (slug).
-     * @return \Illuminate\View\View Renderiza la vista de advertencia.
      */
     public function confirmarEliminacion(string $id)
     {
-        /**
-         * Instanciamos el modelo de forma manual usando el campo slug.
-         * El método firstOrFail garantiza la seguridad: si el ID provisto en la URL
-         * no existe en la base de datos, aborta automáticamente con un error 404,
-         * previniendo operaciones nulas.
-         */
         $juego = Juego::where('slug', $id)->firstOrFail();
 
         return view('juegos.eliminar', [
@@ -192,24 +140,13 @@ class JuegosController extends Controller
 
     /**
      * Elimina un juego específico de la base de datos.
-     *
-     * @param  string $id El identificador único del juego a eliminar (slug).
-     * @return \Illuminate\Http\RedirectResponse Redirige al catálogo general tras confirmar la eliminación.
      */
     public function eliminar(string $id)
     {
         $juego = Juego::where('slug', $id)->firstOrFail();
 
-        /**
-         * Eliminamos usando el método delete().
-         */
         $juego->delete();
 
-        /**
-         * Redireccionamos con retroalimentación.
-         * Se aplica e() al título para asegurar que el contenido dinámico esté
-         * debidamente saneado antes de imprimirse en la vista de confirmación.
-         */
         return redirect()
             ->route('juegos.listado')
             ->with('feedback.message', 'El expediente de <b>' . e($juego->titulo) . '</b> fue eliminado de forma permanente.');

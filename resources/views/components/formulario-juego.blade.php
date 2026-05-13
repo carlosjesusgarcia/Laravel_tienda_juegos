@@ -8,7 +8,8 @@
  | - Retroalimentación visual de errores (clase is-invalid de Bootstrap).
  | - Estándares de Accesibilidad (WAI-ARIA) para lectores de pantalla.
  --}}
-<form action="{{ route('juegos.guardar') }}" method="POST" class="text-light">
+{{-- ¡ATENCIÓN! Se añade enctype="multipart/form-data" para permitir subida de archivos --}}
+<form action="{{ route('juegos.guardar') }}" method="POST" class="text-light" enctype="multipart/form-data">
     @csrf
 
     {{-- Condicional para el método HTTP correcto en caso de actualización --}}
@@ -18,11 +19,6 @@
 
     <div class="mb-3">
         <label for="titulo" class="form-label text-vhs-yellow fw-bold">TÍTULO DEL JUEGO</label>
-        {{--
-         | Atributos ARIA:
-         | aria-invalid: Anuncia al lector de pantalla si el valor actual es inválido.
-         | aria-errormessage: Vincula el input con el ID del contenedor que posee el mensaje de error.
-         --}}
         <input type="text"
                class="form-control bg-dark text-light border-secondary @error('titulo') is-invalid @enderror"
                id="titulo"
@@ -72,6 +68,44 @@
 
             @error('fecha_lanzamiento')
                 <div class="text-danger fw-bold mt-1" id="error_fecha_lanzamiento">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
+
+    {{-- NUEVOS CAMPOS DE IMAGEN --}}
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="portada" class="form-label text-vhs-yellow fw-bold">PORTADA DEL JUEGO</label>
+            {{-- Para archivos usamos type="file". No lleva atributo "value" por seguridad de los navegadores --}}
+            <input type="file"
+                   class="form-control bg-dark text-light border-secondary @error('portada') is-invalid @enderror"
+                   id="portada"
+                   name="portada"
+                   @error('portada')
+                       aria-invalid="true"
+                       aria-errormessage="error_portada"
+                   @enderror>
+
+            @error('portada')
+                <div class="text-danger fw-bold mt-1" id="error_portada">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="portada_descripcion" class="form-label text-vhs-yellow fw-bold">DESCRIPCIÓN DE IMAGEN (ACCESIBILIDAD)</label>
+            <input type="text"
+                   class="form-control bg-dark text-light border-secondary @error('portada_descripcion') is-invalid @enderror"
+                   id="portada_descripcion"
+                   name="portada_descripcion"
+                   @error('portada_descripcion')
+                       aria-invalid="true"
+                       aria-errormessage="error_portada_descripcion"
+                   @enderror
+                   value="{{ old('portada_descripcion', $juego?->portada_descripcion) }}"
+                   placeholder="Ej: Cartucho original de Space Invaders">
+
+            @error('portada_descripcion')
+                <div class="text-danger fw-bold mt-1" id="error_portada_descripcion">{{ $message }}</div>
             @enderror
         </div>
     </div>

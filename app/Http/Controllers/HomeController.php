@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+
 class HomeController extends Controller
 {
     public function home()
     {
-        // La vista es el nombre del archivo dentro de la carpeta [resources/views], sin la extensión ni ".php"
-        // ni ".blade.php".
-        return view('welcome');
+        // Traemos las últimas 4 entradas ordenadas por fecha de creación (de más nueva a más vieja)
+        $posts = Post::latest()->take(4)->get();
+
+        return view('welcome', [
+            'posts' => $posts,
+        ]);
     }
 
      public function about()
     {
-        // La vista es el nombre del archivo dentro de la carpeta [resources/views], sin la extensión ni ".php"
-        // ni ".blade.php".
         return view('about');
     }
-
-    // ⚠️ Se eliminó el método login() porque ahora pertenece a AuthController
 }

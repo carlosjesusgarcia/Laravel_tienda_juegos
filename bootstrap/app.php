@@ -11,12 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-   ->withMiddleware(function (Middleware $middleware) {
+  ->withMiddleware(function (Middleware $middleware) {
 
         // Configuramos a dónde queremos redireccionar al usuario si no está autenticado
         // y trata de ingresar a una ruta que requiera estarlo.
         $middleware->redirectGuestsTo(function() {
             Session::flash('feedback.message', 'Para acceder a esta sección es necesario iniciar sesión.');
+            Session::flash('feedback.type', 'danger'); // <--- AGREGAMOS EL TIPO DE ALERTA (Rojo)
             return route('login');
         });
 

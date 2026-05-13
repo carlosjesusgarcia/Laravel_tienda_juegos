@@ -96,3 +96,64 @@ Route::get('/juegos/{juego}/eliminar', [\App\Http\Controllers\JuegosController::
 Route::post('/juegos/{juego}/eliminar', [\App\Http\Controllers\JuegosController::class, 'eliminar'])
     ->name('juegos.eliminar')
     ->middleware('auth');
+
+    /**
+ * |--------------------------------------------------------------------------
+ * | Rutas del Blog / Noticias (CRUD)
+ * |--------------------------------------------------------------------------
+ * | Gestionan el ciclo de vida de las entradas del blog.
+ */
+
+/**
+ * 1. Listado general del blog - PÚBLICO
+ */
+Route::get('/blog', [\App\Http\Controllers\PostController::class, 'index'])
+    ->name('posts.listado');
+
+/**
+ * 2. Formulario de creación de entrada - PROTEGIDO
+ */
+Route::get('/blog/nuevo', [\App\Http\Controllers\PostController::class, 'crear'])
+    ->name('posts.crear')
+    ->middleware('auth');
+
+/**
+ * 3. Persistencia de nueva entrada - PROTEGIDO
+ */
+Route::post('/blog/nuevo', [\App\Http\Controllers\PostController::class, 'guardar'])
+    ->name('posts.guardar')
+    ->middleware('auth');
+
+/**
+ * 4. Lectura de una entrada específica - PÚBLICO
+ */
+Route::get('/blog/{post}', [\App\Http\Controllers\PostController::class, 'leer'])
+    ->name('posts.leer');
+
+/**
+ * 5. Formulario de edición - PROTEGIDO
+ */
+Route::get('/blog/{post}/editar', [\App\Http\Controllers\PostController::class, 'editar'])
+    ->name('posts.editar')
+    ->middleware('auth');
+
+/**
+ * 6. Actualización de entrada - PROTEGIDO
+ */
+Route::put('/blog/{post}/editar', [\App\Http\Controllers\PostController::class, 'actualizar'])
+    ->name('posts.actualizar')
+    ->middleware('auth');
+
+/**
+ * 7. Formulario de confirmación de eliminación - PROTEGIDO
+ */
+Route::get('/blog/{post}/eliminar', [\App\Http\Controllers\PostController::class, 'confirmarEliminacion'])
+    ->name('posts.confirmar_eliminar')
+    ->middleware('auth');
+
+/**
+ * 8. Eliminación de una entrada - PROTEGIDO
+ */
+Route::post('/blog/{post}/eliminar', [\App\Http\Controllers\PostController::class, 'eliminar'])
+    ->name('posts.eliminar')
+    ->middleware('auth');

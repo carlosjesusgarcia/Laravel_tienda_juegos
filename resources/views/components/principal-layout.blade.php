@@ -27,10 +27,14 @@
              | que Blade escape las etiquetas HTML generadas desde el controlador (ej: <b>).
              --}}
             @if(session()->has('feedback.message'))
-                <div class="alert alert-success fw-bold text-center mb-4 border-success shadow-sm" role="alert">
-                    {!! session()->get('feedback.message') !!}
-                </div>
-            @endif
+    {{--
+      Usamos session()->get('feedback.type', 'success') para imprimir 'danger' o 'success'.
+      El 'success' funciona como valor por defecto si no le pasamos ningún tipo.
+    --}}
+    <div class="alert alert-{{ session()->get('feedback.type', 'success') }}">
+        {!! session()->get('feedback.message') !!}
+    </div>
+@endif
 
             {{-- Contenido dinámico inyectado por las vistas hijas --}}
             {{ $slot }}

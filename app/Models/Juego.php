@@ -19,12 +19,14 @@ class Juego extends Model
 
     protected $keyType = 'int';
 
-    protected $fillable = [
+   protected $fillable = [
         'titulo',
         'slug',
         'precio',
         'fecha_lanzamiento',
         'sinopsis',
+        'portada',             // <--- Campo para la ruta de la imagen
+        'portada_descripcion', // <--- Campo para el texto alternativo (SEO/Accesibilidad)
     ];
 
     protected $casts = [
