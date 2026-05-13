@@ -1,24 +1,25 @@
+{{--
+/**
+ * Archivo: tarjeta-juego.blade.php
+ * Función: Componente de interfaz encargado de renderizar de forma modular la información básica de un juego en las grillas del catálogo.
+ *
+ * @var \App\Models\Juego $juego Instancia del modelo que contiene los atributos de identificación, precio y recursos multimedia.
+ */
+--}}
 @props(['juego'])
 
 <div class="col-6 col-md-4 col-lg-3">
     <div class="card h-100 vhs-card">
 
-        {{--
-         | Lógica adaptada al estándar del profesor:
-         | 1. Verificamos que el campo no sea nulo.
-         | 2. Verificamos que el archivo exista físicamente en el disco con Storage::exists().
-         --}}
         @if($juego->portada !== null && \Storage::exists($juego->portada))
             <img
-                {{-- Usamos la fachada Storage para generar la URL correcta --}}
                 src="{{ \Storage::url($juego->portada) }}"
                 class="card-img-top p-2"
                 alt="{{ $juego->portada_descripcion }}"
             >
         @else
-            {{-- Fallback: Imagen por defecto si no pasa las validaciones anteriores --}}
             <img
-                src="{{ url('img/fallback-vhs.jpg') }}"
+                src="{{ url('img/cartucho-vacio.jpg') }}"
                 class="card-img-top p-2"
                 alt="Cartucho sin portada disponible"
             >
@@ -34,7 +35,7 @@
             </p>
 
             <p class="mt-auto fw-bold text-light">
-                ${{ number_format($juego->precio, 2) }}
+                ${{ number_format($juego->precio, 0, ',', '.') }}
             </p>
 
             <div class="d-flex flex-column gap-2 mt-2">

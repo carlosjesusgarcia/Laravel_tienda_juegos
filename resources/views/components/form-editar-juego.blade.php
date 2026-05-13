@@ -1,15 +1,5 @@
 @props(['juego'])
 
-{{--
- | Componente de Formulario: Edición de Juegos
- |
- | Implementa:
- | - enctype="multipart/form-data" para permitir la subida de archivos.
- | - Enrutamiento a la acción de actualización mediante método PUT.
- | - Persistencia de datos combinando el helper old() y el modelo existente.
- | - Retroalimentación visual de errores (clase is-invalid de Bootstrap).
- | - Estándares de Accesibilidad (WAI-ARIA) para lectores de pantalla.
- --}}
 <form action="{{ route('juegos.actualizar', $juego) }}" method="POST" class="text-light" enctype="multipart/form-data">
     @csrf
     @method('PUT')
@@ -46,10 +36,10 @@
                    value="{{ old('precio', $juego->precio) }}"
                    placeholder="250000">
 
-            @error('precio')
-                <div class="text-danger fw-bold mt-1" id="error_precio">{{ $message }}</div>
-            @enderror
-        </div>
+        @error('precio')
+            <div class="text-danger fw-bold mt-1" id="error_precio">{{ $message }}</div>
+        @enderror
+    </div>
 
         <div class="col-md-6 mb-3">
             <label for="fecha_lanzamiento" class="form-label text-vhs-yellow fw-bold">FECHA DE LANZAMIENTO</label>
@@ -69,7 +59,6 @@
         </div>
     </div>
 
-    {{-- NUEVOS CAMPOS DE IMAGEN PARA EDICIÓN --}}
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="portada" class="form-label text-vhs-yellow fw-bold">PORTADA DEL JUEGO</label>

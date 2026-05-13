@@ -2,7 +2,7 @@
     <x-slot:title>Blog</x-slot:title>
 
     <h1 class="display-4 fw-bold text-danger text-center mb-5">
-        ARCHIVO GENERAL
+        NOTICIAS
     </h1>
 
     <p class="text-center text-secondary mb-5">

@@ -18,7 +18,7 @@
     <hr class="border-secondary my-5">
 
     <div class="container mb-5">
-        <h2 class="text-warning mb-4 fw-bold">Últimas Novedades del Archivo</h2>
+        <h2 class="text-warning mb-4 fw-bold">Últimas Noticias</h2>
 
         <div class="row">
             @foreach($posts as $post)

@@ -1,14 +1,5 @@
 @props(['post' => null])
 
-{{--
- | Componente de Formulario: Creación y Edición de Entradas de Blog
- |
- | Implementa:
- | - Persistencia de datos mediante el helper old().
- | - Retroalimentación visual de errores (clase is-invalid de Bootstrap).
- | - Estándares de Accesibilidad (WAI-ARIA).
- | - Soporte para subida de imágenes (enctype).
- --}}
 <form action="{{ $post ? route('posts.actualizar', $post) : route('posts.guardar') }}" method="POST" class="text-light" enctype="multipart/form-data">
     @csrf
 

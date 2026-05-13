@@ -17,15 +17,7 @@
         <x-navbar />
 
         <main class="container flex-grow-1 py-5">
-            {{--
-             |--------------------------------------------------------------------------
-             | Sistema de Notificaciones (Flash Messages)
-             |--------------------------------------------------------------------------
-             | Verifica si el controlador ha "flasheado" un mensaje de feedback en la sesión.
-             | Si existe, renderiza una alerta de Bootstrap.
-             | Nota: Se utilizan llaves con signos de exclamación {!! !!} para evitar
-             | que Blade escape las etiquetas HTML generadas desde el controlador (ej: <b>).
-             --}}
+
             @if(session()->has('feedback.message'))
     {{--
       Usamos session()->get('feedback.type', 'success') para imprimir 'danger' o 'success'.

@@ -11,7 +11,7 @@
                         </h2>
                     </div>
                     <div class="card-body p-4">
-                        {{-- Llamamos al componente del formulario que crearemos a continuación --}}
+
                         <x-formulario-post />
                     </div>
                 </div>

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Archivo: JuegosController.php
+ * Función: Controlador encargado de gestionar el ciclo ABM (Alta, Baja y Modificación) y la visualización del catálogo de juegos.
+ */
 
 namespace App\Http\Controllers;
 
@@ -7,10 +11,19 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Juego;
 use Illuminate\Support\Str;
 
+/**
+ * Clase JuegosController
+ *
+ * Gestiona la lógica de negocio y presentación para la entidad Juego.
+ * Implementa los métodos necesarios para listar, detallar, crear,
+ * actualizar y eliminar registros en el sistema.
+ */
 class JuegosController extends Controller
 {
     /**
-     * Muestra el catálogo de juegos desde la base de datos.
+     * Recupera y muestra el catálogo completo de juegos.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -22,9 +35,9 @@ class JuegosController extends Controller
     }
 
     /**
-     * Muestra los detalles de un juego específico.
+     * Recupera y muestra los detalles de un juego específico basado en su identificador único.
      *
-     * @param string $id El identificador único del juego (slug).
+     * @param string $id El identificador único (slug) del juego a consultar.
      */
     public function detalles(string $id)
     {
@@ -35,13 +48,22 @@ class JuegosController extends Controller
         ]);
     }
 
+    /**
+     * Retorna la vista con el formulario para la creación de un nuevo juego.
+     *
+     */
     public function crear()
     {
         return view('juegos.crear');
     }
 
     /**
-     * Almacenar un nuevo juego en la base de datos.
+     * Valida y almacena un nuevo registro de juego en la base de datos.
+     *
+     * Gestiona la validación de los datos de entrada y el procesamiento del archivo
+     * de portada, almacenándolo en el sistema de archivos público antes de persistir
+     * el modelo.
+     *
      */
     public function guardar(Request $request)
     {
@@ -59,16 +81,10 @@ class JuegosController extends Controller
             'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
         ]);
 
-        // 1. Extraemos los campos de texto, incluyendo ahora la descripción de la portada
         $data = $request->only(['titulo', 'precio', 'fecha_lanzamiento', 'sinopsis', 'portada_descripcion']);
 
-        // 2. Upload de la imagen. Primero, preguntamos si existe una imagen.
         if($request->hasFile('portada')) {
-            // Vamos a guardar este archivo en el "disk" configurado del file system (que pusimos en public).
-            // Se guardará dentro de una subcarpeta llamada "portadas".
             $rutaArchivo = $request->file('portada')->store('portadas');
-
-            // Agregamos este valor generado (ej: "portadas/hashunico.jpg") al array de datos.
             $data['portada'] = $rutaArchivo;
         }
 
@@ -80,7 +96,9 @@ class JuegosController extends Controller
     }
 
     /**
-     * Muestra el formulario con los datos cargados para editar.
+     * Retorna la vista con el formulario de edición pre-poblado con los datos del juego.
+     *
+     * @param string $id El identificador único (slug) del juego a editar.
      */
     public function editar(string $id)
     {
@@ -90,7 +108,12 @@ class JuegosController extends Controller
     }
 
     /**
-     * Procesa la actualización del registro en la base de datos.
+     * Valida y procesa la actualización de un registro existente en la base de datos.
+     *
+     * Aplica las reglas de validación sobre los datos modificados y gestiona
+     * la carga de una nueva imagen de portada en caso de que se haya provisto,
+     * actualizando el modelo correspondiente.
+     *
      */
     public function actualizar(Request $request, string $id)
     {
@@ -110,10 +133,8 @@ class JuegosController extends Controller
             'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
         ]);
 
-        // Actualizamos la captura de datos igual que en guardar()
         $data = $request->only(['titulo', 'precio', 'fecha_lanzamiento', 'sinopsis', 'portada_descripcion']);
 
-        // Procesamiento de la nueva imagen si el usuario decidió subir una
         if($request->hasFile('portada')) {
             $rutaArchivo = $request->file('portada')->store('portadas');
             $data['portada'] = $rutaArchivo;
@@ -127,7 +148,9 @@ class JuegosController extends Controller
     }
 
     /**
-     * Muestra la pantalla de confirmación antes de eliminar un registro.
+     * Retorna la vista de confirmación requerida de forma previa a la eliminación de un registro.
+     *
+     * @param string $id El identificador único (slug) del juego a eliminar.
      */
     public function confirmarEliminacion(string $id)
     {
@@ -139,7 +162,9 @@ class JuegosController extends Controller
     }
 
     /**
-     * Elimina un juego específico de la base de datos.
+     * Ejecuta la eliminación física de un registro de juego en la base de datos.
+     *
+     * @param string $id El identificador único (slug) del juego a eliminar.
      */
     public function eliminar(string $id)
     {
