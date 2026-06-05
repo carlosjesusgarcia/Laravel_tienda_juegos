@@ -35,7 +35,7 @@ html, body, #app {
     color: #000 !important;
 }
 
-/* Efecto de líneas CRT corregido */
+/* Efecto de líneas CRT  */
 body::after {
     content: "";
     position: fixed;
@@ -59,7 +59,7 @@ body::after {
     z-index: 10000;
 }
 
-/* Link activo del navbar con estética neon guapo */
+/* Link activo del navbar con estética neon */
 .navbar .nav-link.active {
     color: #ff3355 !important;
     font-weight: 700;

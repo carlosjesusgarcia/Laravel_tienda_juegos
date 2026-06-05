@@ -1,18 +1,8 @@
 @props(['juego' => null])
 
-{{--
- | Componente de Formulario: Creación y Edición de Juegos
- |
- | Implementa:
- | - Persistencia de datos mediante el helper old().
- | - Retroalimentación visual de errores (clase is-invalid de Bootstrap).
- | - Estándares de Accesibilidad (WAI-ARIA) para lectores de pantalla.
- --}}
-{{-- ¡ATENCIÓN! Se añade enctype="multipart/form-data" para permitir subida de archivos --}}
 <form action="{{ route('juegos.guardar') }}" method="POST" class="text-light" enctype="multipart/form-data">
     @csrf
 
-    {{-- Condicional para el método HTTP correcto en caso de actualización --}}
     @if($juego)
         @method('PUT')
     @endif
@@ -63,7 +53,7 @@
                    @error('fecha_lanzamiento')
                        aria-invalid="true"
                        aria-errormessage="error_fecha_lanzamiento"
-                   @enderror
+                       @enderror
                    value="{{ old('fecha_lanzamiento', $juego?->fecha_lanzamiento) }}">
 
             @error('fecha_lanzamiento')
@@ -72,11 +62,9 @@
         </div>
     </div>
 
-    {{-- NUEVOS CAMPOS DE IMAGEN --}}
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="portada" class="form-label text-vhs-yellow fw-bold">PORTADA DEL JUEGO</label>
-            {{-- Para archivos usamos type="file". No lleva atributo "value" por seguridad de los navegadores --}}
             <input type="file"
                    class="form-control bg-dark text-light border-secondary @error('portada') is-invalid @enderror"
                    id="portada"

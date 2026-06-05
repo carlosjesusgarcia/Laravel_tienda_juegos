@@ -33,7 +33,7 @@ Route::post('/cerrar-sesion', [\App\Http\Controllers\AuthController::class, 'log
  * | Rutas del Archivo de Juegos (CRUD)
  * |--------------------------------------------------------------------------
  * | Gestionan el ciclo de vida de la entidad Juego (Listar, Crear, Leer, Actualizar, Eliminar).
- * | Nota: El orden de declaración prioriza las rutas estáticas sobre las dinámicas
+ * | El orden de declaración prioriza las rutas estáticas sobre las dinámicas
  * | para evitar falsas coincidencias en la resolución de URLs.
  */
 

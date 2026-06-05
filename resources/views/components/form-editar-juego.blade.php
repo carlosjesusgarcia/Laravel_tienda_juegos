@@ -1,15 +1,5 @@
 @props(['juego'])
 
-{{--
- | Componente de Formulario: Edición de Juegos
- |
- | Implementa:
- | - enctype="multipart/form-data" para permitir la subida de archivos.
- | - Enrutamiento a la acción de actualización mediante método PUT.
- | - Persistencia de datos combinando el helper old() y el modelo existente.
- | - Retroalimentación visual de errores (clase is-invalid de Bootstrap).
- | - Estándares de Accesibilidad (WAI-ARIA) para lectores de pantalla.
- --}}
 <form action="{{ route('juegos.actualizar', $juego) }}" method="POST" class="text-light" enctype="multipart/form-data">
     @csrf
     @method('PUT')
@@ -46,10 +36,10 @@
                    value="{{ old('precio', $juego->precio) }}"
                    placeholder="250000">
 
-            @error('precio')
-                <div class="text-danger fw-bold mt-1" id="error_precio">{{ $message }}</div>
-            @enderror
-        </div>
+        @error('precio')
+            <div class="text-danger fw-bold mt-1" id="error_precio">{{ $message }}</div>
+        @enderror
+    </div>
 
         <div class="col-md-6 mb-3">
             <label for="fecha_lanzamiento" class="form-label text-vhs-yellow fw-bold">FECHA DE LANZAMIENTO</label>
@@ -69,24 +59,42 @@
         </div>
     </div>
 
-    {{-- NUEVOS CAMPOS DE IMAGEN PARA EDICIÓN --}}
     <div class="row">
         <div class="col-md-6 mb-3">
-            <label for="portada" class="form-label text-vhs-yellow fw-bold">PORTADA DEL JUEGO</label>
-            <input type="file"
-                   class="form-control bg-dark text-light border-secondary @error('portada') is-invalid @enderror"
-                   id="portada"
-                   name="portada"
-                   @error('portada')
-                       aria-invalid="true"
-                       aria-errormessage="error_portada"
-                   @enderror>
-            <div class="form-text text-secondary mt-1">Deja vacío si no deseas cambiar la imagen actual.</div>
+    <label for="portada" class="form-label text-vhs-yellow fw-bold">PORTADA DEL JUEGO</label>
 
-            @error('portada')
-                <div class="text-danger fw-bold mt-1" id="error_portada">{{ $message }}</div>
-            @enderror
+    <input type="file"
+           class="form-control bg-dark text-light border-secondary @error('portada') is-invalid @enderror"
+           id="portada"
+           name="portada"
+           aria-describedby="help_portada"
+           @error('portada')
+               aria-invalid="true"
+               aria-errormessage="error_portada"
+           @enderror>
+
+    <div id="help_portada" class="form-text text-secondary mt-1">
+        Solo elegí una portada si querés cambiar la actual.
+    </div>
+
+    @error('portada')
+        <div class="text-danger fw-bold mt-1" id="error_portada">
+            {{ $message }}
         </div>
+    @enderror
+
+    <div class="mt-3">
+        <span>Portada actual:</span>
+
+        @if($juego->portada !== null && \Storage::exists($juego->portada))
+            <img src="{{ \Storage::url($juego->portada) }}"
+                 alt="{{ $juego->portada_descripcion }}"
+                 class="img-fluid mt-2">
+        @else
+            <p class="text-secondary mb-0">No tiene una portada actualmente.</p>
+        @endif
+    </div>
+</div>
 
         <div class="col-md-6 mb-3">
             <label for="portada_descripcion" class="form-label text-vhs-yellow fw-bold">DESCRIPCIÓN DE IMAGEN</label>

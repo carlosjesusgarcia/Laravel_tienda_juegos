@@ -68,7 +68,7 @@
 
                 <div class="mt-5 pt-4 border-top border-secondary">
                     <div class="row text-center text-secondary small">
-                        <div class="col-6 border-end border-secondary">ORIGEN<br><b class="text-light">SISTEMA CENTRAL</b></div>
+                        <div class="col-6 border-end border-secondary">AUTOR<br><b class="text-light">RETRO GAMES</b></div>
                         <div class="col-6">ESTADO<br><b class="text-light">PÚBLICO</b></div>
                     </div>
                 </div>

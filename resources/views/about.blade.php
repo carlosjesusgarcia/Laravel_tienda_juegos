@@ -6,7 +6,7 @@
     </h1>
 
     <p class="lead text-secondary">
-        Fundada en el corazón de los años 80, DV Retro Games representa un viaje directo a la era dorada de los 8 bits.
+        Fundada en el corazón de los años 80, Retro Games representa un viaje directo a la era dorada de los 8 bits.
     </p>
 
     <p>
@@ -15,6 +15,6 @@
     </p>
 
     <p>
-        Visítanos y descubre nuestra colección de grandes clásicos. Recuerda: DEVOLVER LOS CARTUCHOS EN SU CAJA ORIGINAL.
+        Visítanos y descubre nuestra colección de grandes clásicos. Recuerda: CONSIGUE LOS CARTUCHOS EN SU CAJA ORIGINAL.
     </p>
 </x-principal-layout>

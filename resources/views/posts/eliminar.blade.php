@@ -20,13 +20,7 @@
 
         <hr class="mb-4 border-secondary">
 
-        {{--
-         |--------------------------------------------------------------------------
-         | Resumen de Datos del Registro
-         |--------------------------------------------------------------------------
-         | Se utiliza una lista de definición (<dl>) para presentar los metadatos
-         | clave de forma semántica y estructurada antes de la confirmación.
-         --}}
+
         <h2 class="mb-3" style="color: #ff3355;">{{ $post->titulo }}</h2>
 
         <dl class="mb-3">
@@ -50,13 +44,7 @@
 
         <hr class="mb-4 border-secondary">
 
-        {{--
-         |--------------------------------------------------------------------------
-         | Formulario de Ejecución
-         |--------------------------------------------------------------------------
-         | Contiene los controles finales. La acción de borrado requiere el método
-         | POST y el token CSRF por normativas de seguridad del framework.
-         --}}
+
         <form action="{{ route('posts.eliminar', $post) }}" method="POST" class="mt-4">
             @csrf
             <div class="d-flex gap-3 align-items-center">

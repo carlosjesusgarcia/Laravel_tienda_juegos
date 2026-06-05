@@ -1,4 +1,8 @@
 <?php
+/**
+ * Archivo: Juego.php
+ * Función: Modelo Eloquent que representa la entidad de un producto o servicio (videojuego), gestionando su persistencia, eventos del ciclo de vida y mutación de atributos.
+ */
 
 namespace App\Models;
 
@@ -7,6 +11,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
+/**
+ * Clase Juego
+ *
+ * Abstracción ORM de la tabla 'juegos' en la base de datos. Establece los atributos
+ * de asignación masiva, los tipos de casting nativos, la generación automatizada
+ * de identificadores amigables (slugs) y la gestión de accesores/mutadores de estado.
+ */
 class Juego extends Model
 {
     use HasFactory;
@@ -19,14 +30,15 @@ class Juego extends Model
 
     protected $keyType = 'int';
 
-   protected $fillable = [
+    protected $fillable = [
         'titulo',
         'slug',
         'precio',
         'fecha_lanzamiento',
         'sinopsis',
-        'portada',             // <--- Campo para la ruta de la imagen
-        'portada_descripcion', // <--- Campo para el texto alternativo (SEO/Accesibilidad)
+        'portada',
+        'portada_descripcion',
+        'rating_fk',
     ];
 
     protected $casts = [
@@ -35,16 +47,13 @@ class Juego extends Model
     ];
 
     /**
-     * Configuración de eventos del modelo.
+     * Inicializa la configuración de eventos del modelo Eloquent.
      *
-     * Como parte del desarrollo profesional del sistema, se ha implementado una lógica
-     * automatizada para la generación de "slugs". Esta técnica permite transformar títulos
-     * legibles (ej: "Super Mario") en cadenas optimizadas para URLs (ej: "super-mario").
+     * Registra los observadores estáticos de ciclo de vida. Aplica lógica transaccional
+     * para derivar y asignar un 'slug' semántico a partir del atributo 'titulo' antes
+     * de la inserción inicial. De igual manera, intercepta el evento de actualización
+     * para regenerar el 'slug' si ocurre una mutación comprobada en el título.
      *
-     * Se utilizan los "model hooks" para garantizar la integridad de los datos:
-     * 1. creating: Genera el slug inicial al registrar un cartucho.
-     * 2. updating: Detecta si el título ha sido modificado mediante isDirty() y,
-     *    en tal caso, regenera el slug para mantener la coherencia en las rutas.
      */
     protected static function booted()
     {
@@ -60,32 +69,39 @@ class Juego extends Model
     }
 
     /**
-     * Indica a Laravel que use el 'slug' para las rutas en lugar del ID.
+     * Sobrescribe el atributo predeterminado para la resolución del "Route Model Binding".
+     *
+     * Modifica el comportamiento estándar de la inyección de dependencias en las rutas
+     * de Laravel para resolver instancias del modelo utilizando la columna 'slug',
+     * optimizando las URLs bajo criterios SEO.
+     *
      */
     public function getRouteKeyName()
     {
         return 'slug';
     }
 
-    /*--------------------------------------------------------------------------
-    | Accessors & Mutators
-    |--------------------------------------------------------------------------
-    | Los accessors y mutators son funciones que nos permite modificar
-    | el valor de un atributo de Eloquent cuando se lo accede para
-    | lectura o cuando le asignamos un nuevo valor, respectivamente.
-    | Para crearlos tenemos que definir un método que se llame igual
-    | que el atributo, pero en camelCase.
-    | Adicionalmente, este método *debe* tipar el retorno como una
-    | instancia de \Illuminate\Database\Eloquent\Casts\Attribute.
-    +--------------------------------------------------------------------------*/
+    /**
+     * Define la relación con la clasificación del juego.
+     */
+    public function rating()
+    {
+        return $this->belongsTo(
+            Rating::class,
+            'rating_fk',
+            'rating_id'
+        );
+    }
+
+    /**
+     * Configura el accesor y mutador para el atributo 'precio'.
+     *
+     * Aplica el patrón de diseño para operaciones financieras en bases de datos relacionales.
+     * Transforma el flujo de entrada a una representación entera para garantizar
+     * la integridad y precisión aritmética en el almacenamiento.
+     */
     public function precio(): Attribute
     {
-        // Finalmente, tenemos que retornar una llamada al método Attribute::make().
-        // Este método recibe 2 parámetros, ambos opcionales:
-        // 1. ?callable. get. La función que transforma el valor en el acceso a lectura.
-        // El callable recibe el valor actual como parámetro, y debe retornar el valor modificado.
-        // 2. ?callable. set. La función que transforma el valor en la asignación.
-        // El callable recibe como parámetro el valor nuevo a asignar, y debe retornar el valor modificado.
         return Attribute::make(
             get: fn ($value) => $value / 100,
             set: fn ($value) => $value * 100,

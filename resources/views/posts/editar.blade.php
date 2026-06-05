@@ -11,7 +11,7 @@
                         </h2>
                     </div>
                     <div class="card-body p-4">
-                        {{-- Llamamos al componente pasándole la variable $post --}}
+
                         <x-formulario-post :post="$post" />
                     </div>
                 </div>

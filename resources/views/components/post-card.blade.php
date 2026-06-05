@@ -3,7 +3,6 @@
 <div class="card mb-4 vhs-card bg-black">
     <div class="row g-0">
 
-        {{-- Columna de la Imagen (Ocupa 4 de 12 columnas en pantallas medianas/grandes, 100% en pequeñas) --}}
         <div class="col-md-4 d-flex align-items-center p-2">
             @if($post->imagen !== null && \Storage::exists($post->imagen))
                 <img
@@ -20,7 +19,6 @@
             @endif
         </div>
 
-        {{-- Columna del Texto (Ocupa 8 de 12 columnas en pantallas medianas/grandes) --}}
         <div class="col-md-8">
             <div class="card-body d-flex flex-column h-100 p-4">
 

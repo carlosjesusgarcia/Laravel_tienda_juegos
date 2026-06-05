@@ -20,7 +20,6 @@
                     <x-nav-link active-route="juegos.listado">Catálogo</x-nav-link>
                 </li>
 
-                {{-- Nuevo enlace al listado del Blog --}}
                 <li class="nav-item">
                     <x-nav-link active-route="posts.listado">Blog</x-nav-link>
                 </li>

@@ -1,3 +1,9 @@
+{{--
+/**
+ * Archivo: login.blade.php
+ * Función: Plantilla de presentación encargada de renderizar la interfaz gráfica del formulario de autenticación para el personal del sistema.
+ */
+--}}
 <x-principal-layout>
     <x-slot:title>Login</x-slot:title>
 
@@ -12,7 +18,6 @@
 
         <div class="card bg-black border-secondary w-100" style="max-width: 400px;">
             <div class="card-body p-4">
-                {{-- Formulario preparado para enviar datos por POST --}}
                 <form action="{{ route('login.process') }}" method="POST">
                     @csrf
 
