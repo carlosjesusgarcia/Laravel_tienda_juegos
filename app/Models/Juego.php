@@ -94,6 +94,24 @@ class Juego extends Model
     }
 
     /**
+     * Relación muchos a muchos entre juegos y géneros.
+     *
+     * Un juego puede tener muchos géneros y un género puede pertenecer
+     * a muchos juegos.
+     */
+    public function generos()
+    {
+        return $this->belongsToMany(
+            Genero::class,
+            'juegos_tienen_generos',
+            'juego_fk',
+            'genero_fk',
+            'juego_id',
+            'genero_id',
+        );
+    }
+
+    /**
      * Configura el accesor y mutador para el atributo 'precio'.
      *
      * Aplica el patrón de diseño para operaciones financieras en bases de datos relacionales.

@@ -9,6 +9,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Juego;
+use App\Models\Rating;
+use App\Models\Genero;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,10 +30,8 @@ class JuegosController extends Controller
      */
     public function index()
     {
-        $juegos = Juego::all();
-
         return view('juegos.index', [
-            'juegos' => $juegos,
+            'juegos' => Juego::with(['rating', 'generos'])->get(),
         ]);
     }
 
@@ -42,7 +42,9 @@ class JuegosController extends Controller
      */
     public function detalles(string $id)
     {
-        $juego = Juego::where('slug', $id)->firstOrFail();
+        $juego = Juego::with(['rating', 'generos'])
+            ->where('slug', $id)
+            ->firstOrFail();
 
         return view('juegos.detalles-juego', [
             'juego' => $juego,
@@ -51,11 +53,13 @@ class JuegosController extends Controller
 
     /**
      * Retorna la vista con el formulario para la creación de un nuevo juego.
-     *
      */
     public function crear()
     {
-        return view('juegos.crear');
+        return view('juegos.crear', [
+            'ratings' => Rating::all(),
+            'generos' => Genero::all(),
+        ]);
     }
 
     /**
@@ -64,7 +68,6 @@ class JuegosController extends Controller
      * Gestiona la validación de los datos de entrada y el procesamiento del archivo
      * de portada, almacenándolo en el sistema de archivos público antes de persistir
      * el modelo.
-     *
      */
     public function guardar(Request $request)
     {
@@ -72,6 +75,9 @@ class JuegosController extends Controller
             'titulo'            => 'required|min:2',
             'precio'            => 'required|numeric',
             'fecha_lanzamiento' => 'required',
+            'rating_fk'         => 'required|exists:ratings,rating_id',
+            'generos'           => 'required',
+            'generos.*'         => 'exists:generos,genero_id',
             'sinopsis'          => 'required',
         ], [
             'titulo.required'            => 'El título del juego debe tener un valor.',
@@ -79,17 +85,30 @@ class JuegosController extends Controller
             'precio.required'            => 'El precio del juego debe tener un valor.',
             'precio.numeric'             => 'El precio del juego debe ser un valor numérico.',
             'fecha_lanzamiento.required' => 'La fecha de lanzamiento debe tener un valor.',
+            'rating_fk.required'         => 'Hay que elegir una clasificación para el juego.',
+            'rating_fk.exists'           => 'La clasificación elegida no existe.',
+            'generos.required'           => 'Hay que elegir al menos un género para el juego.',
+            'generos.*.exists'           => 'Uno de los géneros elegidos no existe.',
             'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
         ]);
 
-        $data = $request->only(['titulo', 'precio', 'fecha_lanzamiento', 'sinopsis', 'portada_descripcion']);
+        $data = $request->only([
+            'titulo',
+            'precio',
+            'fecha_lanzamiento',
+            'rating_fk',
+            'sinopsis',
+            'portada_descripcion',
+        ]);
 
         if($request->hasFile('portada')) {
             $rutaArchivo = $request->file('portada')->store('portadas');
             $data['portada'] = $rutaArchivo;
         }
 
-        Juego::create($data);
+        $juego = Juego::create($data);
+
+        $juego->generos()->attach($request->input('generos'));
 
         return redirect()
             ->route('juegos.listado')
@@ -104,7 +123,9 @@ class JuegosController extends Controller
     public function editar(string $id)
     {
         return view('juegos.editar', [
-            'juego' => Juego::where('slug', $id)->firstOrFail(),
+            'juego' => Juego::with(['generos'])->where('slug', $id)->firstOrFail(),
+            'ratings' => Rating::all(),
+            'generos' => Genero::all(),
         ]);
     }
 
@@ -114,54 +135,63 @@ class JuegosController extends Controller
      * Aplica las reglas de validación sobre los datos modificados y gestiona
      * la carga de una nueva imagen de portada en caso de que se haya provisto,
      * actualizando el modelo correspondiente.
-     *
      */
     public function actualizar(Request $request, string $id)
-{
-    $juego = Juego::where('slug', $id)->firstOrFail();
+    {
+        $juego = Juego::where('slug', $id)->firstOrFail();
 
-    $request->validate([
-        'titulo'            => 'required|min:2',
-        'precio'            => 'required|numeric',
-        'fecha_lanzamiento' => 'required',
-        'sinopsis'          => 'required',
-        'portada'           => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
-    ], [
-        'titulo.required'            => 'El título del juego debe tener un valor.',
-        'titulo.min'                 => 'El título del juego debe tener al menos :min caracteres.',
-        'precio.required'            => 'El precio del juego debe tener un valor.',
-        'precio.numeric'             => 'El precio del juego debe ser un valor numérico.',
-        'fecha_lanzamiento.required' => 'La fecha de lanzamiento debe tener un valor.',
-        'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
-        'portada.mimes'              => 'La portada debe ser una imagen JPG, JPEG, PNG o WEBP.',
-        'portada.max'                => 'La portada no puede pesar más de 2 MB.',
-    ]);
+        $request->validate([
+            'titulo'            => 'required|min:2',
+            'precio'            => 'required|numeric',
+            'fecha_lanzamiento' => 'required',
+            'rating_fk'         => 'required|exists:ratings,rating_id',
+            'generos'           => 'required',
+            'generos.*'         => 'exists:generos,genero_id',
+            'sinopsis'          => 'required',
+            'portada'           => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
+        ], [
+            'titulo.required'            => 'El título del juego debe tener un valor.',
+            'titulo.min'                 => 'El título del juego debe tener al menos :min caracteres.',
+            'precio.required'            => 'El precio del juego debe tener un valor.',
+            'precio.numeric'             => 'El precio del juego debe ser un valor numérico.',
+            'fecha_lanzamiento.required' => 'La fecha de lanzamiento debe tener un valor.',
+            'rating_fk.required'         => 'Hay que elegir una clasificación para el juego.',
+            'rating_fk.exists'           => 'La clasificación elegida no existe.',
+            'generos.required'           => 'Hay que elegir al menos un género para el juego.',
+            'generos.*.exists'           => 'Uno de los géneros elegidos no existe.',
+            'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
+            'portada.mimes'              => 'La portada debe ser una imagen JPG, JPEG, PNG o WEBP.',
+            'portada.max'                => 'La portada no puede pesar más de 2 MB.',
+        ]);
 
-    $data = $request->only([
-        'titulo',
-        'precio',
-        'fecha_lanzamiento',
-        'sinopsis',
-        'portada_descripcion',
-    ]);
+        $data = $request->only([
+            'titulo',
+            'precio',
+            'fecha_lanzamiento',
+            'rating_fk',
+            'sinopsis',
+            'portada_descripcion',
+        ]);
 
-    $portadaAnterior = $juego->portada;
+        $portadaAnterior = $juego->portada;
 
-    if($request->hasFile('portada')) {
-        $rutaArchivo = $request->file('portada')->store('portadas');
-        $data['portada'] = $rutaArchivo;
+        if($request->hasFile('portada')) {
+            $rutaArchivo = $request->file('portada')->store('portadas');
+            $data['portada'] = $rutaArchivo;
+        }
+
+        $juego->update($data);
+
+        $juego->generos()->sync($request->input('generos'));
+
+        if(isset($data['portada']) && $portadaAnterior !== null && Storage::exists($portadaAnterior)) {
+            Storage::delete($portadaAnterior);
+        }
+
+        return redirect()
+            ->route('juegos.listado')
+            ->with('feedback.message', 'El juego <b>' . e($juego->titulo) . '</b> se actualizó correctamente.');
     }
-
-    $juego->update($data);
-
-    if(isset($data['portada']) && $portadaAnterior !== null && Storage::exists($portadaAnterior)) {
-        Storage::delete($portadaAnterior);
-    }
-
-    return redirect()
-        ->route('juegos.listado')
-        ->with('feedback.message', 'El juego <b>' . e($juego->titulo) . '</b> se actualizó correctamente.');
-}
 
     /**
      * Retorna la vista de confirmación requerida de forma previa a la eliminación de un registro.
@@ -183,10 +213,12 @@ class JuegosController extends Controller
      * @param string $id El identificador único (slug) del juego a eliminar.
      */
     public function eliminar(string $id)
-{
+    {
         $juego = Juego::where('slug', $id)->firstOrFail();
 
         $portada = $juego->portada;
+
+        $juego->generos()->detach();
 
         $juego->delete();
 
@@ -197,5 +229,5 @@ class JuegosController extends Controller
         return redirect()
             ->route('juegos.listado')
             ->with('feedback.message', 'El juego <b>' . e($juego->titulo) . '</b> fue eliminado de forma permanente.');
-}
+    }
 }

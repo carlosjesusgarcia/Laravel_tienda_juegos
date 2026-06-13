@@ -29,6 +29,7 @@
                             class="form-control bg-dark text-light border-secondary"
                             id="emailInput"
                             placeholder="jugador1@ejemplo.com"
+                            value="{{ old('email') }}"
                             required
                         >
                     </div>

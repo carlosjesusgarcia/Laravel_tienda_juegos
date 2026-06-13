@@ -4,7 +4,7 @@
     <div class="container py-5">
         <div class="mb-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <a href="{{ route('posts.listado') }}" class="btn btn-vhs-yellow">
-                <i class="bi bi-arrow-left"></i> [ VOLVER AL ARCHIVO ]
+                <i class="bi bi-arrow-left"></i> [ VOLVER AL BLOG ]
             </a>
 
             @auth
@@ -69,7 +69,12 @@
                 <div class="mt-5 pt-4 border-top border-secondary">
                     <div class="row text-center text-secondary small">
                         <div class="col-6 border-end border-secondary">AUTOR<br><b class="text-light">RETRO GAMES</b></div>
-                        <div class="col-6">ESTADO<br><b class="text-light">PÚBLICO</b></div>
+                            @auth
+                            <div class="col-6">
+                                ESTADO<br>
+                                <b class="text-light">PÚBLICO</b>
+                            </div>
+                        @endauth
                     </div>
                 </div>
             </div>

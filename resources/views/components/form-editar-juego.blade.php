@@ -1,4 +1,5 @@
-@props(['juego'])
+```blade
+@props(['juego', 'ratings', 'generos'])
 
 <form action="{{ route('juegos.actualizar', $juego) }}" method="POST" class="text-light" enctype="multipart/form-data">
     @csrf
@@ -36,10 +37,10 @@
                    value="{{ old('precio', $juego->precio) }}"
                    placeholder="250000">
 
-        @error('precio')
-            <div class="text-danger fw-bold mt-1" id="error_precio">{{ $message }}</div>
-        @enderror
-    </div>
+            @error('precio')
+                <div class="text-danger fw-bold mt-1" id="error_precio">{{ $message }}</div>
+            @enderror
+        </div>
 
         <div class="col-md-6 mb-3">
             <label for="fecha_lanzamiento" class="form-label text-vhs-yellow fw-bold">FECHA DE LANZAMIENTO</label>
@@ -51,7 +52,7 @@
                        aria-invalid="true"
                        aria-errormessage="error_fecha_lanzamiento"
                    @enderror
-                   value="{{ old('fecha_lanzamiento', $juego->fecha_lanzamiento) }}">
+                   value="{{ old('fecha_lanzamiento', $juego->fecha_lanzamiento->format('Y-m-d')) }}">
 
             @error('fecha_lanzamiento')
                 <div class="text-danger fw-bold mt-1" id="error_fecha_lanzamiento">{{ $message }}</div>
@@ -59,42 +60,100 @@
         </div>
     </div>
 
+    <div class="mb-3">
+        <label for="rating_fk" class="form-label text-vhs-yellow fw-bold">CLASIFICACIÓN DEL JUEGO</label>
+        <select
+            id="rating_fk"
+            name="rating_fk"
+            class="form-control bg-dark text-light border-secondary @error('rating_fk') is-invalid @enderror"
+            @error('rating_fk')
+                aria-invalid="true"
+                aria-errormessage="error_rating_fk"
+            @enderror
+        >
+            <option value="">Elegí una clasificación</option>
+
+            @foreach($ratings as $rating)
+                <option value="{{ $rating->rating_id }}" @if(old('rating_fk', $juego->rating_fk) == $rating->rating_id) selected @endif>
+                    {{ $rating->nombre }} ({{ $rating->abreviatura }})
+                </option>
+            @endforeach
+        </select>
+
+        @error('rating_fk')
+            <div class="text-danger fw-bold mt-1" id="error_rating_fk">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="mb-3">
+        <span class="form-label text-vhs-yellow fw-bold d-block">GÉNERO DEL JUEGO</span>
+
+        <div class="row">
+            @foreach($generos as $genero)
+                <div class="col-md-6 mb-2">
+                    <div class="form-check">
+                        <input
+                            type="checkbox"
+                            class="form-check-input @error('generos') is-invalid @enderror"
+                            id="genero_{{ $genero->genero_id }}"
+                            name="generos[]"
+                            value="{{ $genero->genero_id }}"
+                            @if(in_array($genero->genero_id, old('generos', $juego->generos->pluck('genero_id')->toArray()))) checked @endif
+                        >
+
+                        <label class="form-check-label text-light" for="genero_{{ $genero->genero_id }}">
+                            {{ $genero->nombre }}
+                        </label>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        @error('generos')
+            <div class="text-danger fw-bold mt-1" id="error_generos">{{ $message }}</div>
+        @enderror
+
+        @error('generos.*')
+            <div class="text-danger fw-bold mt-1">{{ $message }}</div>
+        @enderror
+    </div>
+
     <div class="row">
         <div class="col-md-6 mb-3">
-    <label for="portada" class="form-label text-vhs-yellow fw-bold">PORTADA DEL JUEGO</label>
+            <label for="portada" class="form-label text-vhs-yellow fw-bold">PORTADA DEL JUEGO</label>
 
-    <input type="file"
-           class="form-control bg-dark text-light border-secondary @error('portada') is-invalid @enderror"
-           id="portada"
-           name="portada"
-           aria-describedby="help_portada"
-           @error('portada')
-               aria-invalid="true"
-               aria-errormessage="error_portada"
-           @enderror>
+            <input type="file"
+                   class="form-control bg-dark text-light border-secondary @error('portada') is-invalid @enderror"
+                   id="portada"
+                   name="portada"
+                   aria-describedby="help_portada"
+                   @error('portada')
+                       aria-invalid="true"
+                       aria-errormessage="error_portada"
+                   @enderror>
 
-    <div id="help_portada" class="form-text text-secondary mt-1">
-        Solo elegí una portada si querés cambiar la actual.
-    </div>
+            <div id="help_portada" class="form-text text-secondary mt-1">
+                Solo elegí una portada si querés cambiar la actual.
+            </div>
 
-    @error('portada')
-        <div class="text-danger fw-bold mt-1" id="error_portada">
-            {{ $message }}
+            @error('portada')
+                <div class="text-danger fw-bold mt-1" id="error_portada">
+                    {{ $message }}
+                </div>
+            @enderror
+
+            <div class="mt-3">
+                <span>Portada actual:</span>
+
+                @if($juego->portada !== null && \Storage::exists($juego->portada))
+                    <img src="{{ \Storage::url($juego->portada) }}"
+                         alt="{{ $juego->portada_descripcion }}"
+                         class="img-fluid mt-2">
+                @else
+                    <p class="text-secondary mb-0">No tiene una portada actualmente.</p>
+                @endif
+            </div>
         </div>
-    @enderror
-
-    <div class="mt-3">
-        <span>Portada actual:</span>
-
-        @if($juego->portada !== null && \Storage::exists($juego->portada))
-            <img src="{{ \Storage::url($juego->portada) }}"
-                 alt="{{ $juego->portada_descripcion }}"
-                 class="img-fluid mt-2">
-        @else
-            <p class="text-secondary mb-0">No tiene una portada actualmente.</p>
-        @endif
-    </div>
-</div>
 
         <div class="col-md-6 mb-3">
             <label for="portada_descripcion" class="form-label text-vhs-yellow fw-bold">DESCRIPCIÓN DE IMAGEN</label>
@@ -134,10 +193,8 @@
 
     <div class="d-grid gap-2">
         <button type="submit" class="btn btn-vhs-yellow fw-bold">
-            [ ACTUALIZAR NÚCLEO ]
+            [ ACTUALIZAR JUEGO ]
         </button>
-        <a href="{{ route('juegos.listado') }}" class="btn btn-outline-danger btn-sm">
-            ABORTAR OPERACIÓN
-        </a>
     </div>
 </form>
+```

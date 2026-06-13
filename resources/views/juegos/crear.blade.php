@@ -4,17 +4,24 @@
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
+
+                <a href="{{ route('juegos.listado') }}" class="btn btn-outline-danger btn-sm mb-3">
+                    VOLVER AL CATÁLOGO
+                </a>
+
                 <div class="card bg-black border-danger shadow-lg">
                     <div class="card-header border-danger bg-dark">
-                        <h2 class="text-danger fw-bold stranger-text mb-0 py-2">
+                        <h1 class="h2 text-danger fw-bold stranger-text mb-0 py-2">
                             > REGISTRAR NUEVA ENTRADA
-                        </h2>
+                        </h1>
                     </div>
+
                     <div class="card-body p-4">
                         {{-- Llamamos al componente --}}
-                        <x-formulario-juego />
+                        <x-formulario-juego :ratings="$ratings" :generos="$generos" />
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

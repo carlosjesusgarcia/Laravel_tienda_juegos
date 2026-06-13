@@ -1,4 +1,5 @@
-@props(['juego' => null])
+```blade
+@props(['juego' => null, 'ratings', 'generos'])
 
 <form action="{{ route('juegos.guardar') }}" method="POST" class="text-light" enctype="multipart/form-data">
     @csrf
@@ -53,13 +54,71 @@
                    @error('fecha_lanzamiento')
                        aria-invalid="true"
                        aria-errormessage="error_fecha_lanzamiento"
-                       @enderror
+                   @enderror
                    value="{{ old('fecha_lanzamiento', $juego?->fecha_lanzamiento) }}">
 
             @error('fecha_lanzamiento')
                 <div class="text-danger fw-bold mt-1" id="error_fecha_lanzamiento">{{ $message }}</div>
             @enderror
         </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="rating_fk" class="form-label text-vhs-yellow fw-bold">CLASIFICACIÓN DEL JUEGO</label>
+        <select
+            id="rating_fk"
+            name="rating_fk"
+            class="form-control bg-dark text-light border-secondary @error('rating_fk') is-invalid @enderror"
+            @error('rating_fk')
+                aria-invalid="true"
+                aria-errormessage="error_rating_fk"
+            @enderror
+        >
+            <option value="">Elegí una clasificación</option>
+
+            @foreach($ratings as $rating)
+                <option value="{{ $rating->rating_id }}" @if(old('rating_fk', $juego?->rating_fk) == $rating->rating_id) selected @endif>
+                    {{ $rating->nombre }} ({{ $rating->abreviatura }})
+                </option>
+            @endforeach
+        </select>
+
+        @error('rating_fk')
+            <div class="text-danger fw-bold mt-1" id="error_rating_fk">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="mb-3">
+        <span class="form-label text-vhs-yellow fw-bold d-block">GÉNERO DEL JUEGO</span>
+
+        <div class="row">
+            @foreach($generos as $genero)
+                <div class="col-md-6 mb-2">
+                    <div class="form-check">
+                        <input
+                            type="checkbox"
+                            class="form-check-input @error('generos') is-invalid @enderror"
+                            id="genero_{{ $genero->genero_id }}"
+                            name="generos[]"
+                            value="{{ $genero->genero_id }}"
+                            @if(in_array($genero->genero_id, old('generos', []))) checked @endif
+                        >
+
+                        <label class="form-check-label text-light" for="genero_{{ $genero->genero_id }}">
+                            {{ $genero->nombre }}
+                        </label>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        @error('generos')
+            <div class="text-danger fw-bold mt-1" id="error_generos">{{ $message }}</div>
+        @enderror
+
+        @error('generos.*')
+            <div class="text-danger fw-bold mt-1">{{ $message }}</div>
+        @enderror
     </div>
 
     <div class="row">
@@ -117,10 +176,8 @@
 
     <div class="d-grid gap-2">
         <button type="submit" class="btn btn-vhs-yellow fw-bold">
-            [ {{ $juego ? 'ACTUALIZAR NÚCLEO' : 'GUARDAR EN EL ARCHIVO' }} ]
+            [ {{ $juego ? 'ACTUALIZAR JUEGO' : 'GUARDAR EN EL ARCHIVO' }} ]
         </button>
-        <a href="{{ route('juegos.listado') }}" class="btn btn-outline-danger btn-sm">
-            ABORTAR OPERACIÓN
-        </a>
     </div>
 </form>
+```

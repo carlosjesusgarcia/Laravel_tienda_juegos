@@ -46,9 +46,9 @@
                 </div>
 
                 <div class="p-4 mb-4" style="background-color: #1a1a1a; border-left: 4px solid #ff8800;">
-                    <h3 class="h6 text-uppercase text-secondary fw-bold mb-3" style="letter-spacing: 2px;">
-                        Sinopsis del sistema
-                    </h3>
+                    <h2 class="h2 text-uppercase text-secondary fw-bold mb-3" style="letter-spacing: 2px;">
+                        Sinopsis
+                    </h2>
                     <p class="lead" style="line-height: 1.8; color: #ccc;">
                         {{ $juego->sinopsis ?? 'No hay datos adicionales sobre este cartucho en la base de datos central.' }}
                     </p>
@@ -71,7 +71,13 @@
                 <div class="mt-5 pt-4 border-top border-secondary">
                     <div class="row text-center text-secondary small">
                         <div class="col-4 border-end border-secondary">FORMATO<br><b class="text-light">NTSC</b></div>
-                        <div class="col-4 border-end border-secondary">GÉNERO<br><b class="text-light">RETRO-GAME</b></div>
+                        <div class="col-4 border-end border-secondary">
+                            GÉNERO<br>
+
+                            @foreach($juego->generos as $genero)
+                                <b class="text-light">{{ $genero->nombre }}</b><br>
+                            @endforeach
+                        </div>
                         <div class="col-4">COPIAS<br><b class="text-light">LIMITADAS</b></div>
                     </div>
                 </div>

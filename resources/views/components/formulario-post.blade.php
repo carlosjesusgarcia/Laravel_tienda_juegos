@@ -101,8 +101,6 @@
         <button type="submit" class="btn btn-vhs-yellow fw-bold">
             [ {{ $post ? 'ACTUALIZAR REGISTRO' : 'PUBLICAR ENTRADA' }} ]
         </button>
-        <a href="{{ route('posts.listado') }}" class="btn btn-outline-danger btn-sm">
-            ABORTAR OPERACIÓN
-        </a>
+
     </div>
 </form>
