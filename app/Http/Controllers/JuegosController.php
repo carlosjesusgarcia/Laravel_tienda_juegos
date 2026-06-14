@@ -28,10 +28,35 @@ class JuegosController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
+        $parametrosBusqueda = [
+            's-clasificacion' => $request->query('s-clasificacion'),
+            's-genero' => $request->query('s-genero'),
+        ];
+
+        if($parametrosBusqueda['s-genero']) {
+            $genero = Genero::findOrFail($parametrosBusqueda['s-genero']);
+
+            $consultaJuegos = $genero->juegos()
+                ->with(['rating', 'generos']);
+        } else {
+            $consultaJuegos = Juego::with(['rating', 'generos']);
+        }
+
+        if($parametrosBusqueda['s-clasificacion']) {
+            $consultaJuegos->where('rating_fk', $parametrosBusqueda['s-clasificacion']);
+        }
+
+        $juegos = $consultaJuegos
+            ->orderBy('titulo')
+            ->get();
+
         return view('juegos.index', [
-            'juegos' => Juego::with(['rating', 'generos'])->get(),
+            'juegos' => $juegos,
+            'clasificaciones' => Rating::all(),
+            'generos' => Genero::all(),
+            'parametrosBusqueda' => $parametrosBusqueda,
         ]);
     }
 
