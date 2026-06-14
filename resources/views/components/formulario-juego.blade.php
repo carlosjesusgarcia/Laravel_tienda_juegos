@@ -1,4 +1,3 @@
-```blade
 @props(['juego' => null, 'ratings', 'generos'])
 
 <form action="{{ route('juegos.guardar') }}" method="POST" class="text-light" enctype="multipart/form-data">
@@ -101,7 +100,7 @@
                             id="genero_{{ $genero->genero_id }}"
                             name="generos[]"
                             value="{{ $genero->genero_id }}"
-                            @if(in_array($genero->genero_id, old('generos', []))) checked @endif
+                            @checked(in_array($genero->genero_id, old('generos', [])))
                         >
 
                         <label class="form-check-label text-light" for="genero_{{ $genero->genero_id }}">
@@ -180,4 +179,4 @@
         </button>
     </div>
 </form>
-```
+

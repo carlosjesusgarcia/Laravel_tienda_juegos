@@ -133,7 +133,7 @@ class JuegosController extends Controller
 
         $juego = Juego::create($data);
 
-        $juego->generos()->attach($request->input('generos'));
+        $juego->generos()->attach($request->input('generos', []));
 
         return redirect()
             ->route('juegos.listado')
@@ -207,7 +207,7 @@ class JuegosController extends Controller
 
         $juego->update($data);
 
-        $juego->generos()->sync($request->input('generos'));
+        $juego->generos()->sync($request->input('generos', []));
 
         if(isset($data['portada']) && $portadaAnterior !== null && Storage::exists($portadaAnterior)) {
             Storage::delete($portadaAnterior);
