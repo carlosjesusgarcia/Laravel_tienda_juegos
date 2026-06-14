@@ -8,14 +8,17 @@
             </a>
 
             @auth
-                <div class="d-flex gap-2">
-                    <a href="{{ route('posts.editar', $post) }}" class="btn btn-success fw-bold px-4">
-                        EDITAR
-                    </a>
-                    <a href="{{ route('posts.confirmar_eliminar', $post) }}" class="btn btn-danger fw-bold px-4">
-                        ELIMINAR
-                    </a>
-                </div>
+                @if(Auth::user()->rol_fk == 1)
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('posts.editar', $post) }}" class="btn btn-success fw-bold px-4">
+                            EDITAR
+                        </a>
+
+                        <a href="{{ route('posts.confirmar_eliminar', $post) }}" class="btn btn-danger fw-bold px-4">
+                            ELIMINAR
+                        </a>
+                    </div>
+                @endif
             @endauth
         </div>
 
@@ -60,6 +63,7 @@
                     <h3 class="h6 text-uppercase text-secondary fw-bold mb-3" style="letter-spacing: 2px;">
                         Registro Desclasificado
                     </h3>
+
                     {{-- Usamos nl2br para respetar los saltos de línea del texto y la función 'e()' para evitar inyecciones de código --}}
                     <div class="lead" style="line-height: 1.8; color: #ccc;">
                         {!! nl2br(e($post->contenido)) !!}
@@ -68,8 +72,12 @@
 
                 <div class="mt-5 pt-4 border-top border-secondary">
                     <div class="row text-center text-secondary small">
-                        <div class="col-6 border-end border-secondary">AUTOR<br><b class="text-light">RETRO GAMES</b></div>
-                            @auth
+                        <div class="col-6 border-end border-secondary">
+                            AUTOR<br>
+                            <b class="text-light">RETRO GAMES</b>
+                        </div>
+
+                        @auth
                             <div class="col-6">
                                 ESTADO<br>
                                 <b class="text-light">PÚBLICO</b>

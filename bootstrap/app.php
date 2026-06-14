@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-  ->withMiddleware(function (Middleware $middleware) {
+    ->withMiddleware(function (Middleware $middleware) {
 
         /**
          * Define la directiva de redirección para accesos no autorizados.
@@ -32,6 +32,10 @@ return Application::configure(basePath: dirname(__DIR__))
             Session::flash('feedback.type', 'danger');
             return route('login');
         });
+
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\VerificarAdministrador::class,
+        ]);
 
     })
     ->withExceptions(function (Exceptions $exceptions): void {

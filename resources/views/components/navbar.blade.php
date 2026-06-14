@@ -27,6 +27,10 @@
                 {{-- @guest muestra su contenido solo a los usuarios NO logueados --}}
                 @guest
                     <li class="nav-item">
+                        <x-nav-link active-route="registro">Registro</x-nav-link>
+                    </li>
+
+                    <li class="nav-item">
                         <x-nav-link active-route="login">Login</x-nav-link>
                     </li>
                 @endguest

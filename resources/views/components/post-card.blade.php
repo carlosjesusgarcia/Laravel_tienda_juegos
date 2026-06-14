@@ -43,13 +43,15 @@
                     </a>
 
                     @auth
-                        <a href="{{ route('posts.editar', $post) }}" class="btn btn-success fw-bold">
-                            EDITAR
-                        </a>
+                        @if(Auth::user()->rol_fk == 1)
+                            <a href="{{ route('posts.editar', $post) }}" class="btn btn-success fw-bold">
+                                EDITAR
+                            </a>
 
-                        <a href="{{ route('posts.confirmar_eliminar', $post) }}" class="btn btn-danger fw-bold">
-                            ELIMINAR
-                        </a>
+                            <a href="{{ route('posts.confirmar_eliminar', $post) }}" class="btn btn-danger fw-bold">
+                                ELIMINAR
+                            </a>
+                        @endif
                     @endauth
                 </div>
 
