@@ -21,12 +21,23 @@ class PostController extends Controller
      * Recupera y expone el listado completo de las entradas del blog.
      *
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
+        $parametrosBusqueda = [
+            's-title' => $request->query('s-title'),
+        ];
+
+        $consultaPosts = Post::orderBy('titulo');
+
+        if($parametrosBusqueda['s-title'] !== null) {
+            $consultaPosts->where('titulo', 'LIKE', '%' . $parametrosBusqueda['s-title'] . '%');
+        }
+
+        $posts = $consultaPosts->get();
 
         return view('posts.index', [
             'posts' => $posts,
+            'parametrosBusqueda' => $parametrosBusqueda,
         ]);
     }
 

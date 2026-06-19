@@ -17,17 +17,41 @@
         </div>
     @endauth
 
+    <x-buscador
+        action="{{ route('posts.listado') }}"
+        titulo="Buscar noticias"
+        label="Título"
+        name="s-title"
+        id="s-title"
+        value="{{ $parametrosBusqueda['s-title'] ?? '' }}"
+        button="Buscar"
+    />
+
+    @if($parametrosBusqueda['s-title'] !== null)
+        @if($posts->isNotEmpty())
+            <p class="text-secondary mb-4">
+                <i>Se muestran los resultados para "<b>{{ $parametrosBusqueda['s-title'] }}</b>".</i>
+            </p>
+        @else
+            <p class="text-secondary mb-4">
+                No se encontraron resultados para la búsqueda "<b>{{ $parametrosBusqueda['s-title'] }}</b>".
+            </p>
+        @endif
+    @endif
+
     <div class="row g-4">
         @forelse ($posts as $post)
             <div class="col-12">
                 <x-post-card :post="$post" />
             </div>
         @empty
-            <div class="col-12 text-center">
-                <p class="text-secondary">
-                    No hay entradas publicadas en el archivo.
-                </p>
-            </div>
+            @if($parametrosBusqueda['s-title'] === null)
+                <div class="col-12 text-center">
+                    <p class="text-secondary">
+                        No hay entradas publicadas en el archivo.
+                    </p>
+                </div>
+            @endif
         @endforelse
     </div>
 </x-principal-layout>

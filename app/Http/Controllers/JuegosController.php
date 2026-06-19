@@ -29,36 +29,41 @@ class JuegosController extends Controller
      * @return \Illuminate\View\View
      */
     public function index(Request $request)
-    {
-        $parametrosBusqueda = [
-            's-clasificacion' => $request->query('s-clasificacion'),
-            's-genero' => $request->query('s-genero'),
-        ];
+        {
+            $parametrosBusqueda = [
+                's-title' => $request->query('s-title'),
+                's-clasificacion' => $request->query('s-clasificacion'),
+                's-genero' => $request->query('s-genero'),
+            ];
 
-        if($parametrosBusqueda['s-genero']) {
-            $genero = Genero::findOrFail($parametrosBusqueda['s-genero']);
+            if($parametrosBusqueda['s-genero']) {
+                $genero = Genero::findOrFail($parametrosBusqueda['s-genero']);
 
-            $consultaJuegos = $genero->juegos()
-                ->with(['rating', 'generos']);
-        } else {
-            $consultaJuegos = Juego::with(['rating', 'generos']);
+                $consultaJuegos = $genero->juegos()
+                    ->with(['rating', 'generos']);
+            } else {
+                $consultaJuegos = Juego::with(['rating', 'generos']);
+            }
+
+            if($parametrosBusqueda['s-title'] !== null) {
+                $consultaJuegos->where('titulo', 'LIKE', '%' . $parametrosBusqueda['s-title'] . '%');
+            }
+
+            if($parametrosBusqueda['s-clasificacion']) {
+                $consultaJuegos->where('rating_fk', $parametrosBusqueda['s-clasificacion']);
+            }
+
+            $juegos = $consultaJuegos
+                ->orderBy('titulo')
+                ->get();
+
+            return view('juegos.index', [
+                'juegos' => $juegos,
+                'clasificaciones' => Rating::all(),
+                'generos' => Genero::all(),
+                'parametrosBusqueda' => $parametrosBusqueda,
+            ]);
         }
-
-        if($parametrosBusqueda['s-clasificacion']) {
-            $consultaJuegos->where('rating_fk', $parametrosBusqueda['s-clasificacion']);
-        }
-
-        $juegos = $consultaJuegos
-            ->orderBy('titulo')
-            ->get();
-
-        return view('juegos.index', [
-            'juegos' => $juegos,
-            'clasificaciones' => Rating::all(),
-            'generos' => Genero::all(),
-            'parametrosBusqueda' => $parametrosBusqueda,
-        ]);
-    }
 
     /**
      * Recupera y muestra los detalles de un juego específico basado en su identificador único.

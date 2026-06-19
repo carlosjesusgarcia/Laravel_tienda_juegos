@@ -18,6 +18,16 @@
         </div>
     @endauth
 
+    <x-buscador
+        action="{{ route('juegos.listado') }}"
+        titulo="Buscar juegos"
+        label="Título"
+        name="s-title"
+        id="s-title"
+        value="{{ $parametrosBusqueda['s-title'] ?? '' }}"
+        button="Buscar"
+    />
+
     <section class="mb-5 p-4 border border-secondary rounded">
         <h2 class="h4 text-warning mb-4">
             Filtrar catálogo
@@ -74,15 +84,29 @@
         </form>
     </section>
 
+    @if($parametrosBusqueda['s-title'] !== null)
+        @if($juegos->isNotEmpty())
+            <p class="text-secondary mb-4">
+                <i>Se muestran los resultados para "<b>{{ $parametrosBusqueda['s-title'] }}</b>".</i>
+            </p>
+        @else
+            <p class="text-secondary mb-4">
+                No se encontraron resultados para la búsqueda "<b>{{ $parametrosBusqueda['s-title'] }}</b>".
+            </p>
+        @endif
+    @endif
+
     <div class="row g-4">
         @forelse ($juegos as $juego)
             <x-game-card :juego="$juego" />
         @empty
-            <div class="col-12 text-center">
-                <p class="text-secondary">
-                    No hay juegos disponibles para esos filtros.
-                </p>
-            </div>
+            @if($parametrosBusqueda['s-title'] === null)
+                <div class="col-12 text-center">
+                    <p class="text-secondary">
+                        No hay juegos disponibles para esos filtros.
+                    </p>
+                </div>
+            @endif
         @endforelse
     </div>
 </x-principal-layout>
