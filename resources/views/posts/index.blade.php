@@ -54,4 +54,8 @@
             @endif
         @endforelse
     </div>
+
+    <div class="mt-5 d-flex justify-content-center">
+        {{ $posts->appends($parametrosBusqueda)->links() }}
+    </div>
 </x-principal-layout>

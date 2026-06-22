@@ -55,7 +55,7 @@ class JuegosController extends Controller
 
             $juegos = $consultaJuegos
                 ->orderBy('titulo')
-                ->get();
+                ->paginate(4);
 
             return view('juegos.index', [
                 'juegos' => $juegos,

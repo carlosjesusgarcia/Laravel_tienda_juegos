@@ -33,7 +33,7 @@ class PostController extends Controller
             $consultaPosts->where('titulo', 'LIKE', '%' . $parametrosBusqueda['s-title'] . '%');
         }
 
-        $posts = $consultaPosts->get();
+        $posts = $consultaPosts->paginate(2);
 
         return view('posts.index', [
             'posts' => $posts,

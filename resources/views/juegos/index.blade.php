@@ -109,4 +109,8 @@
             @endif
         @endforelse
     </div>
+
+    <div class="mt-5 d-flex justify-content-center">
+        {{ $juegos->appends($parametrosBusqueda)->links() }}
+    </div>
 </x-principal-layout>
