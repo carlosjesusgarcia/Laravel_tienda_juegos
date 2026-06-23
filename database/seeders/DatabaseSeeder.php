@@ -27,7 +27,11 @@ class DatabaseSeeder extends Seeder
         // Crea los juegos y carga la tabla pivot juegos_tienen_generos.
         $this->call(JuegoSeeder::class);
 
-        // 6. LLAMAMOS AL SEEDER DE POSTS
+        // 6. LLAMAMOS AL SEEDER DE COMPRAS
+        // Debe ejecutarse después de UserSeeder y JuegoSeeder porque compras depende de usuarios y juegos.
+        $this->call(ComprasSeeder::class);
+
+        // 7. LLAMAMOS AL SEEDER DE POSTS
         $this->call(PostSeeder::class);
     }
 }

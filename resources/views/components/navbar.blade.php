@@ -37,6 +37,12 @@
 
                 {{-- @auth muestra su contenido solo a los usuarios SÍ logueados --}}
                 @auth
+                    @if(auth()->user()->rol_fk == 1)
+                        <li class="nav-item">
+                            <x-nav-link active-route="admin.index">Panel Admin</x-nav-link>
+                        </li>
+                    @endif
+
                     <li class="nav-item ms-lg-2">
                         <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
                             @csrf

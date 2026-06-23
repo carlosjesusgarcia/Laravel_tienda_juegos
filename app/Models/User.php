@@ -27,6 +27,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Define la relación con las compras realizadas por el usuario.
+     */
+    public function compras()
+    {
+        return $this->hasMany(
+            Compra::class,
+            'user_fk',
+            'id'
+        );
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

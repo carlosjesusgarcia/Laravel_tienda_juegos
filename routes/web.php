@@ -36,6 +36,28 @@ Route::post('/cerrar-sesion', [\App\Http\Controllers\AuthController::class, 'log
 
 /**
  * |--------------------------------------------------------------------------
+ * | Rutas del Panel de Administración
+ * |--------------------------------------------------------------------------
+ * | Rutas restringidas para usuarios autenticados con rol administrador.
+ */
+
+Route::get('/admin', [\App\Http\Controllers\AdminController::class, 'index'])
+    ->name('admin.index')
+    ->middleware('auth')
+    ->middleware('admin');
+
+Route::get('/admin/usuarios', [\App\Http\Controllers\AdminUsuariosController::class, 'index'])
+    ->name('admin.usuarios.index')
+    ->middleware('auth')
+    ->middleware('admin');
+
+Route::get('/admin/usuarios/{id}', [\App\Http\Controllers\AdminUsuariosController::class, 'detalles'])
+    ->name('admin.usuarios.detalles')
+    ->middleware('auth')
+    ->middleware('admin');
+
+/**
+ * |--------------------------------------------------------------------------
  * | Rutas del Archivo de Juegos (CRUD)
  * |--------------------------------------------------------------------------
  * | Gestionan el ciclo de vida de la entidad Juego.
