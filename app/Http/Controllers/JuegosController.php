@@ -109,6 +109,7 @@ class JuegosController extends Controller
             'generos'           => 'required',
             'generos.*'         => 'exists:generos,genero_id',
             'sinopsis'          => 'required',
+            'portada'           => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
             'titulo.required'            => 'El título del juego debe tener un valor.',
             'titulo.min'                 => 'El título del juego debe tener al menos :min caracteres.',
@@ -120,6 +121,8 @@ class JuegosController extends Controller
             'generos.required'           => 'Hay que elegir al menos un género para el juego.',
             'generos.*.exists'           => 'Uno de los géneros elegidos no existe.',
             'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
+            'portada.mimes'              => 'La portada debe ser una imagen JPG, JPEG, PNG o WEBP.',
+            'portada.max'                => 'La portada no puede pesar más de 2 MB.',
         ]);
 
         $data = $request->only([

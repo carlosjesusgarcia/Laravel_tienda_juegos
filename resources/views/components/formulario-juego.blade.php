@@ -127,6 +127,7 @@
                    class="form-control bg-dark text-light border-secondary @error('portada') is-invalid @enderror"
                    id="portada"
                    name="portada"
+                   accept="image/jpeg,image/png,image/webp"
                    @error('portada')
                        aria-invalid="true"
                        aria-errormessage="error_portada"
@@ -179,4 +180,3 @@
         </button>
     </div>
 </form>
-

@@ -51,6 +51,7 @@
                    class="form-control bg-dark text-light border-secondary @error('imagen') is-invalid @enderror"
                    id="imagen"
                    name="imagen"
+                   accept="image/jpeg,image/png,image/webp"
                    @error('imagen')
                        aria-invalid="true"
                        aria-errormessage="error_imagen"
@@ -101,6 +102,5 @@
         <button type="submit" class="btn btn-vhs-yellow fw-bold">
             [ {{ $post ? 'ACTUALIZAR REGISTRO' : 'PUBLICAR ENTRADA' }} ]
         </button>
-
     </div>
 </form>

@@ -7,6 +7,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Post;
 
 /**
@@ -77,10 +78,14 @@ class PostController extends Controller
         $request->validate([
             'titulo'    => 'required|min:2',
             'contenido' => 'required',
+            'imagen'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
             'titulo.required'    => 'El título de la entrada debe tener un valor.',
             'titulo.min'         => 'El título de la entrada debe tener al menos :min caracteres.',
             'contenido.required' => 'El contenido de la entrada no puede estar vacío.',
+            'imagen.image'       => 'El archivo debe ser una imagen.',
+            'imagen.mimes'       => 'La imagen debe ser de tipo jpg, jpeg, png o webp.',
+            'imagen.max'         => 'La imagen no debe superar los 2MB.',
         ]);
 
         $data = $request->only(['titulo', 'subtitulo', 'contenido', 'imagen_descripcion']);
@@ -124,15 +129,23 @@ class PostController extends Controller
         $request->validate([
             'titulo'    => 'required|min:2',
             'contenido' => 'required',
+            'imagen'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
             'titulo.required'    => 'El título de la entrada debe tener un valor.',
             'titulo.min'         => 'El título de la entrada debe tener al menos :min caracteres.',
             'contenido.required' => 'El contenido de la entrada no puede estar vacío.',
+            'imagen.image'       => 'El archivo debe ser una imagen.',
+            'imagen.mimes'       => 'La imagen debe ser de tipo jpg, jpeg, png o webp.',
+            'imagen.max'         => 'La imagen no debe superar los 2MB.',
         ]);
 
         $data = $request->only(['titulo', 'subtitulo', 'contenido', 'imagen_descripcion']);
 
         if($request->hasFile('imagen')) {
+            if($post->imagen !== null && Storage::exists($post->imagen)) {
+                Storage::delete($post->imagen);
+            }
+
             $rutaArchivo = $request->file('imagen')->store('blog');
             $data['imagen'] = $rutaArchivo;
         }
@@ -166,6 +179,10 @@ class PostController extends Controller
     public function eliminar(string $id)
     {
         $post = Post::where('slug', $id)->firstOrFail();
+
+        if($post->imagen !== null && Storage::exists($post->imagen)) {
+            Storage::delete($post->imagen);
+        }
 
         $post->delete();
 

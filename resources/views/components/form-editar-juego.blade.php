@@ -98,7 +98,6 @@
                             name="generos[]"
                             value="{{ $genero->genero_id }}"
                             @checked(in_array($genero->genero_id, old('generos', $juego->generos->pluck('genero_id')->toArray())))
-
                         >
 
                         <label class="form-check-label text-light" for="genero_{{ $genero->genero_id }}">
@@ -126,6 +125,7 @@
                    class="form-control bg-dark text-light border-secondary @error('portada') is-invalid @enderror"
                    id="portada"
                    name="portada"
+                   accept="image/jpeg,image/png,image/webp"
                    aria-describedby="help_portada"
                    @error('portada')
                        aria-invalid="true"
@@ -197,4 +197,3 @@
         </button>
     </div>
 </form>
-
