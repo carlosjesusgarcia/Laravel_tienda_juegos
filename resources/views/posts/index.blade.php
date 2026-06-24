@@ -11,11 +11,13 @@
         </p>
 
         @auth
-            <div class="text-center mb-5">
-                <a href="{{ route('posts.crear') }}" class="btn btn-vhs-cyan fw-bold px-4">
-                    [ PUBLICAR NUEVA ENTRADA ]
-                </a>
-            </div>
+            @if(Auth::user()->rol_fk == 1)
+                <div class="text-center mb-5">
+                    <a href="{{ route('posts.crear') }}" class="btn btn-vhs-cyan fw-bold px-4">
+                        [ PUBLICAR NUEVA ENTRADA ]
+                    </a>
+                </div>
+            @endif
         @endauth
     </section>
 

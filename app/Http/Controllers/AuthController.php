@@ -1,7 +1,8 @@
 <?php
+
 /**
  * Archivo: AuthController.php
- * Función: Controlador encargado de gestionar el proceso de autenticación y registro de usuarios.
+ * Función: Maneja el login, registro y cierre de sesión.
  */
 
 namespace App\Http\Controllers;
@@ -11,17 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Clase AuthController
- *
- * Gestiona la lógica de autenticación de los usuarios del sistema,
- * incluyendo el acceso, la validación de credenciales, el registro y el cierre de sesión.
- */
 class AuthController extends Controller
 {
     /**
-     * Retorna la vista correspondiente al formulario de inicio de sesión.
-     *
+     * Muestra el formulario de login.
      */
     public function login()
     {
@@ -29,8 +23,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Procesa la solicitud de inicio de sesión.
-     *
+     * Revisa los datos del login.
      */
     public function process(Request $request)
     {
@@ -49,8 +42,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Retorna la vista correspondiente al formulario de registro.
-     *
+     * Muestra el formulario de registro.
      */
     public function registro()
     {
@@ -58,8 +50,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Procesa el registro de un nuevo usuario común.
-     *
+     * Guarda un usuario nuevo.
      */
     public function guardarRegistro(Request $request)
     {
@@ -91,8 +82,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Cierra la sesión del usuario autenticado.
-     *
+     * Cierra la sesión actual.
      */
     public function logout(Request $request)
     {

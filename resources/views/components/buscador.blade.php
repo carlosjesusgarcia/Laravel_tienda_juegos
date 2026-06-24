@@ -3,14 +3,6 @@
  * Archivo: buscador.blade.php
  * Función: Componente reutilizable para renderizar un formulario de búsqueda
  * por título en listados públicos.
- *
- * @var string $action Ruta a la que se enviará el formulario.
- * @var string $titulo Título visible del bloque buscador.
- * @var string $label Texto del label del campo.
- * @var string $name Nombre del campo enviado por GET.
- * @var string $id ID HTML del campo.
- * @var string|null $value Valor actual del campo de búsqueda.
- * @var string $button Texto del botón.
  */
 --}}
 

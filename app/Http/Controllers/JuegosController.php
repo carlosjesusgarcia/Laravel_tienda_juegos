@@ -1,74 +1,62 @@
 <?php
+
 /**
  * Archivo: JuegosController.php
- * Función: Controlador encargado de gestionar el ciclo ABM (Alta, Baja y Modificación) y la visualización del catálogo de juegos.
+ * Función: Maneja el catálogo de juegos: listado, detalle, carga, edición y borrado.
  */
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Juego;
 use App\Models\Rating;
 use App\Models\Genero;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * Clase JuegosController
- *
- * Gestiona la lógica de negocio y presentación para la entidad Juego.
- * Implementa los métodos necesarios para listar, detallar, crear,
- * actualizar y eliminar registros en el sistema.
- */
 class JuegosController extends Controller
 {
     /**
-     * Recupera y muestra el catálogo completo de juegos.
-     *
-     * @return \Illuminate\View\View
+     * Muestra el listado de juegos con sus filtros.
      */
     public function index(Request $request)
-        {
-            $parametrosBusqueda = [
-                's-title' => $request->query('s-title'),
-                's-clasificacion' => $request->query('s-clasificacion'),
-                's-genero' => $request->query('s-genero'),
-            ];
+    {
+        $parametrosBusqueda = [
+            's-title' => $request->query('s-title'),
+            's-clasificacion' => $request->query('s-clasificacion'),
+            's-genero' => $request->query('s-genero'),
+        ];
 
-            if($parametrosBusqueda['s-genero']) {
-                $genero = Genero::findOrFail($parametrosBusqueda['s-genero']);
+        if($parametrosBusqueda['s-genero']) {
+            $genero = Genero::findOrFail($parametrosBusqueda['s-genero']);
 
-                $consultaJuegos = $genero->juegos()
-                    ->with(['rating', 'generos']);
-            } else {
-                $consultaJuegos = Juego::with(['rating', 'generos']);
-            }
-
-            if($parametrosBusqueda['s-title'] !== null) {
-                $consultaJuegos->where('titulo', 'LIKE', '%' . $parametrosBusqueda['s-title'] . '%');
-            }
-
-            if($parametrosBusqueda['s-clasificacion']) {
-                $consultaJuegos->where('rating_fk', $parametrosBusqueda['s-clasificacion']);
-            }
-
-            $juegos = $consultaJuegos
-                ->orderBy('titulo')
-                ->paginate(4);
-
-            return view('juegos.index', [
-                'juegos' => $juegos,
-                'clasificaciones' => Rating::all(),
-                'generos' => Genero::all(),
-                'parametrosBusqueda' => $parametrosBusqueda,
-            ]);
+            $consultaJuegos = $genero->juegos()
+                ->with(['rating', 'generos']);
+        } else {
+            $consultaJuegos = Juego::with(['rating', 'generos']);
         }
 
+        if($parametrosBusqueda['s-title'] !== null) {
+            $consultaJuegos->where('titulo', 'LIKE', '%' . $parametrosBusqueda['s-title'] . '%');
+        }
+
+        if($parametrosBusqueda['s-clasificacion']) {
+            $consultaJuegos->where('rating_fk', $parametrosBusqueda['s-clasificacion']);
+        }
+
+        $juegos = $consultaJuegos
+            ->orderBy('titulo')
+            ->paginate(4);
+
+        return view('juegos.index', [
+            'juegos' => $juegos,
+            'clasificaciones' => Rating::all(),
+            'generos' => Genero::all(),
+            'parametrosBusqueda' => $parametrosBusqueda,
+        ]);
+    }
+
     /**
-     * Recupera y muestra los detalles de un juego específico basado en su identificador único.
-     *
-     * @param string $id El identificador único (slug) del juego a consultar.
+     * Muestra el detalle de un juego.
      */
     public function detalles(string $id)
     {
@@ -82,7 +70,7 @@ class JuegosController extends Controller
     }
 
     /**
-     * Retorna la vista con el formulario para la creación de un nuevo juego.
+     * Muestra el formulario para crear un juego.
      */
     public function crear()
     {
@@ -93,11 +81,7 @@ class JuegosController extends Controller
     }
 
     /**
-     * Valida y almacena un nuevo registro de juego en la base de datos.
-     *
-     * Gestiona la validación de los datos de entrada y el procesamiento del archivo
-     * de portada, almacenándolo en el sistema de archivos público antes de persistir
-     * el modelo.
+     * Guarda un juego nuevo.
      */
     public function guardar(Request $request)
     {
@@ -149,9 +133,7 @@ class JuegosController extends Controller
     }
 
     /**
-     * Retorna la vista con el formulario de edición pre-poblado con los datos del juego.
-     *
-     * @param string $id El identificador único (slug) del juego a editar.
+     * Muestra el formulario para editar un juego.
      */
     public function editar(string $id)
     {
@@ -163,11 +145,7 @@ class JuegosController extends Controller
     }
 
     /**
-     * Valida y procesa la actualización de un registro existente en la base de datos.
-     *
-     * Aplica las reglas de validación sobre los datos modificados y gestiona
-     * la carga de una nueva imagen de portada en caso de que se haya provisto,
-     * actualizando el modelo correspondiente.
+     * Actualiza los datos de un juego.
      */
     public function actualizar(Request $request, string $id)
     {
@@ -227,9 +205,7 @@ class JuegosController extends Controller
     }
 
     /**
-     * Retorna la vista de confirmación requerida de forma previa a la eliminación de un registro.
-     *
-     * @param string $id El identificador único (slug) del juego a eliminar.
+     * Muestra la pantalla para confirmar el borrado.
      */
     public function confirmarEliminacion(string $id)
     {
@@ -241,9 +217,7 @@ class JuegosController extends Controller
     }
 
     /**
-     * Ejecuta la eliminación física de un registro de juego en la base de datos.
-     *
-     * @param string $id El identificador único (slug) del juego a eliminar.
+     * Borra un juego.
      */
     public function eliminar(string $id)
     {

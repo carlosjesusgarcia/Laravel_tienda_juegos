@@ -77,10 +77,12 @@
                         </div>
 
                         @auth
-                            <div class="col-6">
-                                ESTADO<br>
-                                <b class="text-light">PÚBLICO</b>
-                            </div>
+                            @if(Auth::user()->rol_fk == 1)
+                                <div class="col-6">
+                                    ESTADO<br>
+                                    <b class="text-light">PÚBLICO</b>
+                                </div>
+                            @endif
                         @endauth
                     </div>
                 </section>

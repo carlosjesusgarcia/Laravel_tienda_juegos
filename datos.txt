@@ -6,4 +6,6 @@ Turno: Noche
 Comisión: DWN4AV
 Apellido y nombre: García de Castro, Carlos
 Docente: Santiago Gallino
-Carácter de entrega: 1er parcial
+Carácter de entrega: 2do parcial
+Base de datos: garcia_carlos
+

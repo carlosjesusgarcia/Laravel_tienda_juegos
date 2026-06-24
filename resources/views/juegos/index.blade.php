@@ -10,12 +10,14 @@
     </p>
 
     {{-- @auth restringe la vista del botón de creación solo a administradores logueados --}}
-    @auth
-        <div class="text-center mb-5">
-            <a href="{{ route('juegos.crear') }}" class="btn btn-vhs-cyan fw-bold px-4">
-                [ REGISTRAR NUEVO JUEGO ]
-            </a>
-        </div>
+   @auth
+        @if(Auth::user()->rol_fk == 1)
+            <div class="text-center mb-5">
+                <a href="{{ route('juegos.crear') }}" class="btn btn-vhs-cyan fw-bold px-4">
+                    [ REGISTRAR NUEVO JUEGO ]
+                </a>
+            </div>
+        @endif
     @endauth
 
     <x-buscador

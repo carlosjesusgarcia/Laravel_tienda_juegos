@@ -3,7 +3,6 @@
  * Archivo: game-card.blade.php
  * Función: Componente de interfaz encargado de renderizar de forma modular la información básica de un juego en las grillas del catálogo.
  *
- * @var \App\Models\Juego $juego Instancia del modelo que contiene los atributos de identificación, precio y recursos multimedia.
  */
 --}}
 @props(['juego'])

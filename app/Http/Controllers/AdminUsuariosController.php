@@ -1,23 +1,18 @@
 <?php
+
 /**
  * Archivo: AdminUsuariosController.php
- * Función: Controlador responsable de gestionar la visualización de usuarios dentro del panel administrador.
+ * Función: Muestra los usuarios registrados y el detalle de sus compras.
  */
 
 namespace App\Http\Controllers;
 
 use App\Models\User;
 
-/**
- * Clase AdminUsuariosController
- *
- * Permite al administrador consultar el listado de usuarios registrados
- * y acceder al detalle de cada usuario junto con sus compras realizadas.
- */
 class AdminUsuariosController extends Controller
 {
     /**
-     * Muestra el listado de usuarios registrados.
+     * Muestra el listado de usuarios.
      */
     public function index()
     {
@@ -31,7 +26,7 @@ class AdminUsuariosController extends Controller
     }
 
     /**
-     * Muestra el detalle de un usuario junto con sus compras.
+     * Muestra los datos de un usuario y sus compras.
      */
     public function detalles(int $id)
     {
