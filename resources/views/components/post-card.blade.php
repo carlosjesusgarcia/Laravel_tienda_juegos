@@ -1,21 +1,13 @@
 @props(['post'])
 
-<div class="card mb-4 vhs-card bg-black">
+<article class="card mb-4 vhs-card bg-black">
     <div class="row g-0">
 
         <div class="col-md-4 d-flex align-items-center p-2">
             @if($post->imagen !== null && \Storage::exists($post->imagen))
-                <img
-                    src="{{ \Storage::url($post->imagen) }}"
-                    class="img-fluid rounded"
-                    alt="{{ $post->imagen_descripcion }}"
-                >
+                <img src="{{ \Storage::url($post->imagen) }}" class="img-fluid rounded" alt="{{ $post->imagen_descripcion ?? 'Imagen de la entrada ' . $post->titulo }}">
             @else
-                <img
-                    src="{{ url('img/fallback-vhs.jpg') }}"
-                    class="img-fluid rounded"
-                    alt="Entrada sin imagen disponible"
-                >
+                <img src="{{ url('img/fallback-vhs.jpg') }}" class="img-fluid rounded" alt="Entrada sin imagen disponible">
             @endif
         </div>
 
@@ -32,7 +24,6 @@
                     </h6>
                 @endif
 
-                {{-- Limitamos el contenido a 150 caracteres para la previsualización --}}
                 <p class="card-text text-secondary mt-3 mb-4">
                     {{ \Illuminate\Support\Str::limit($post->contenido, 150) }}
                 </p>
@@ -58,4 +49,4 @@
             </div>
         </div>
     </div>
-</div>
+</article>

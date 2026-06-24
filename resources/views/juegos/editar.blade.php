@@ -1,7 +1,7 @@
 <x-principal-layout>
     <x-slot:title>Editar Cartucho: {{ $juego->titulo }}</x-slot:title>
 
-    <div class="container py-5">
+    <section class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
 
@@ -9,7 +9,7 @@
                     VOLVER AL CATÁLOGO
                 </a>
 
-                <div class="card bg-black border-danger shadow-lg">
+                <section class="card bg-black border-danger shadow-lg">
                     <div class="card-header border-danger bg-dark">
                         <h1 class="h2 text-danger fw-bold stranger-text mb-0 py-2">
                             > ACTUALIZAR ENTRADA DEL ARCHIVO
@@ -17,15 +17,11 @@
                     </div>
 
                     <div class="card-body p-4">
-                        {{--
-                         | Llamamos al componente de edición específico y le
-                         | inyectamos la instancia del juego actual.
-                         --}}
                         <x-form-editar-juego :juego="$juego" :ratings="$ratings" :generos="$generos" />
                     </div>
-                </div>
+                </section>
 
             </div>
         </div>
-    </div>
+    </section>
 </x-principal-layout>

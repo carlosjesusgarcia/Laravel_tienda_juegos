@@ -147,7 +147,7 @@
 
                 @if($juego->portada !== null && \Storage::exists($juego->portada))
                     <img src="{{ \Storage::url($juego->portada) }}"
-                         alt="{{ $juego->portada_descripcion }}"
+                         alt="{{ $juego->portada_descripcion ?? 'Portada actual del juego ' . $juego->titulo }}"
                          class="img-fluid mt-2">
                 @else
                     <p class="text-secondary mb-0">No tiene una portada actualmente.</p>

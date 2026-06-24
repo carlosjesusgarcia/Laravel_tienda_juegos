@@ -9,20 +9,12 @@
 @props(['juego'])
 
 <div class="col-6 col-md-4 col-lg-3">
-    <div class="card h-100 vhs-card">
+    <article class="card h-100 vhs-card">
 
         @if($juego->portada !== null && \Storage::exists($juego->portada))
-            <img
-                src="{{ \Storage::url($juego->portada) }}"
-                class="card-img-top p-2"
-                alt="{{ $juego->portada_descripcion }}"
-            >
+            <img src="{{ \Storage::url($juego->portada) }}" class="card-img-top p-2" alt="{{ $juego->portada_descripcion ?? 'Portada del juego ' . $juego->titulo }}">
         @else
-            <img
-                src="{{ url('img/cartucho-vacio.jpg') }}"
-                class="card-img-top p-2"
-                alt="Cartucho sin portada disponible"
-            >
+            <img src="{{ url('img/cartucho-vacio.jpg') }}" class="card-img-top p-2" alt="Cartucho sin portada disponible">
         @endif
 
         <div class="card-body d-flex flex-column bg-black">
@@ -57,7 +49,7 @@
                     VER DETALLES
                 </a>
 
-                <a href="#" class="btn vhs-btn w-100">
+                <a href="{{ route('juegos.detalles', $juego) }}" class="btn vhs-btn w-100">
                     COMPRAR
                 </a>
 
@@ -74,5 +66,5 @@
                 @endauth
             </div>
         </div>
-    </div>
+    </article>
 </div>
