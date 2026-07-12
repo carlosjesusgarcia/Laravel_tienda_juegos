@@ -94,19 +94,6 @@ class JuegosController extends Controller
             'generos.*'         => 'exists:generos,genero_id',
             'sinopsis'          => 'required',
             'portada'           => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
-        ], [
-            'titulo.required'            => 'El título del juego debe tener un valor.',
-            'titulo.min'                 => 'El título del juego debe tener al menos :min caracteres.',
-            'precio.required'            => 'El precio del juego debe tener un valor.',
-            'precio.numeric'             => 'El precio del juego debe ser un valor numérico.',
-            'fecha_lanzamiento.required' => 'La fecha de lanzamiento debe tener un valor.',
-            'rating_fk.required'         => 'Hay que elegir una clasificación para el juego.',
-            'rating_fk.exists'           => 'La clasificación elegida no existe.',
-            'generos.required'           => 'Hay que elegir al menos un género para el juego.',
-            'generos.*.exists'           => 'Uno de los géneros elegidos no existe.',
-            'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
-            'portada.mimes'              => 'La portada debe ser una imagen JPG, JPEG, PNG o WEBP.',
-            'portada.max'                => 'La portada no puede pesar más de 2 MB.',
         ]);
 
         $data = $request->only([
@@ -160,19 +147,6 @@ class JuegosController extends Controller
             'generos.*'         => 'exists:generos,genero_id',
             'sinopsis'          => 'required',
             'portada'           => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
-        ], [
-            'titulo.required'            => 'El título del juego debe tener un valor.',
-            'titulo.min'                 => 'El título del juego debe tener al menos :min caracteres.',
-            'precio.required'            => 'El precio del juego debe tener un valor.',
-            'precio.numeric'             => 'El precio del juego debe ser un valor numérico.',
-            'fecha_lanzamiento.required' => 'La fecha de lanzamiento debe tener un valor.',
-            'rating_fk.required'         => 'Hay que elegir una clasificación para el juego.',
-            'rating_fk.exists'           => 'La clasificación elegida no existe.',
-            'generos.required'           => 'Hay que elegir al menos un género para el juego.',
-            'generos.*.exists'           => 'Uno de los géneros elegidos no existe.',
-            'sinopsis.required'          => 'La sinopsis del archivo debe tener un valor.',
-            'portada.mimes'              => 'La portada debe ser una imagen JPG, JPEG, PNG o WEBP.',
-            'portada.max'                => 'La portada no puede pesar más de 2 MB.',
         ]);
 
         $data = $request->only([

@@ -79,13 +79,6 @@ class PostController extends Controller
             'titulo'    => 'required|min:2',
             'contenido' => 'required',
             'imagen'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ], [
-            'titulo.required'    => 'El título de la entrada debe tener un valor.',
-            'titulo.min'         => 'El título de la entrada debe tener al menos :min caracteres.',
-            'contenido.required' => 'El contenido de la entrada no puede estar vacío.',
-            'imagen.image'       => 'El archivo debe ser una imagen.',
-            'imagen.mimes'       => 'La imagen debe ser de tipo jpg, jpeg, png o webp.',
-            'imagen.max'         => 'La imagen no debe superar los 2MB.',
         ]);
 
         $data = $request->only(['titulo', 'subtitulo', 'contenido', 'imagen_descripcion']);
@@ -130,13 +123,6 @@ class PostController extends Controller
             'titulo'    => 'required|min:2',
             'contenido' => 'required',
             'imagen'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ], [
-            'titulo.required'    => 'El título de la entrada debe tener un valor.',
-            'titulo.min'         => 'El título de la entrada debe tener al menos :min caracteres.',
-            'contenido.required' => 'El contenido de la entrada no puede estar vacío.',
-            'imagen.image'       => 'El archivo debe ser una imagen.',
-            'imagen.mimes'       => 'La imagen debe ser de tipo jpg, jpeg, png o webp.',
-            'imagen.max'         => 'La imagen no debe superar los 2MB.',
         ]);
 
         $data = $request->only(['titulo', 'subtitulo', 'contenido', 'imagen_descripcion']);

@@ -58,15 +58,6 @@ class AuthController extends Controller
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
-        ], [
-            'name.required' => 'El nombre de usuario es obligatorio.',
-            'name.min' => 'El nombre debe tener al menos 3 caracteres.',
-            'email.required' => 'El correo electrónico es obligatorio.',
-            'email.email' => 'Ingresá un correo electrónico válido.',
-            'email.unique' => 'Ese correo electrónico ya está registrado.',
-            'password.required' => 'La contraseña es obligatoria.',
-            'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
-            'password.confirmed' => 'Las contraseñas no coinciden.',
         ]);
 
         User::create([
