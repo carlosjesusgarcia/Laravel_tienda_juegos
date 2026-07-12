@@ -5,7 +5,7 @@
         DETALLE DE USUARIO
     </h1>
 
-    <p class="text-center text-secondary mb-5">
+    <p class="text-center text-light mb-5">
         Información de la cuenta registrada y sus compras asociadas.
     </p>
 
@@ -39,9 +39,10 @@
                 <table class="table table-dark table-bordered border-secondary align-middle mb-0">
                     <thead>
                         <tr>
-                            <th>Juego</th>
+                            <th>Número</th>
                             <th>Fecha</th>
-                            <th>Precio</th>
+                            <th>Juegos</th>
+                            <th>Total</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
@@ -49,9 +50,28 @@
                     <tbody>
                         @foreach($usuario->compras as $compra)
                             <tr>
-                                <td>{{ $compra->juego->titulo }}</td>
-                                <td>{{ $compra->fecha_compra->format('d/m/Y') }}</td>
-                                <td>${{ $compra->precio }}</td>
+                                <td>{{ $compra->compra_id }}</td>
+
+                                <td>
+                                    {{ $compra->fecha_compra->format('d/m/Y') }}
+                                </td>
+
+                                <td>
+                                    <ul class="mb-0">
+                                        @foreach($compra->detalles as $detalle)
+                                            <li>
+                                                {{ $detalle->descripcion }}
+                                                — Cantidad: {{ $detalle->cantidad }}
+                                                — ${{ number_format($detalle->precio_unitario, 2, ',', '.') }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+
+                                <td>
+                                    ${{ number_format($compra->total, 2, ',', '.') }}
+                                </td>
+
                                 <td>{{ $compra->estado }}</td>
                             </tr>
                         @endforeach
@@ -59,14 +79,14 @@
                 </table>
             </div>
         @else
-            <p class="text-secondary mb-0">
+            <p class="text-light mb-0">
                 Este usuario no tiene compras registradas.
             </p>
         @endif
     </section>
 
     <div class="text-center">
-        <a href="{{ route('admin.usuarios.index') }}" class="text-secondary">
+        <a href="{{ route('admin.usuarios.index') }}" class="text-light">
             Volver al listado de usuarios
         </a>
     </div>

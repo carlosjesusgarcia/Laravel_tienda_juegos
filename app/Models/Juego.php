@@ -112,6 +112,40 @@ class Juego extends Model
     }
 
     /**
+     * Define la relación con los detalles de compra del juego.
+     */
+    public function detallesCompras()
+    {
+        return $this->hasMany(
+            CompraTieneJuego::class,
+            'juego_fk',
+            'juego_id'
+        );
+    }
+
+    /**
+     * Relación muchos a muchos entre juegos y compras.
+     *
+     * Un juego puede estar incluido en muchas compras y una compra
+     * puede contener muchos juegos.
+     */
+    public function compras()
+    {
+        return $this->belongsToMany(
+            Compra::class,
+            'compras_tienen_juegos',
+            'juego_fk',
+            'compra_fk',
+            'juego_id',
+            'compra_id'
+        )->withPivot(
+            'cantidad',
+            'precio_unitario',
+            'descripcion'
+        );
+    }
+
+    /**
      * Configura el accesor y mutador para el atributo 'precio'.
      *
      * Aplica el patrón de diseño para operaciones financieras en bases de datos relacionales.

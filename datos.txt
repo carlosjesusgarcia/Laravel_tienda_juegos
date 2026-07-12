@@ -9,5 +9,3 @@ Docente: Santiago Gallino
 Carácter de entrega: 2do parcial
 Base de datos: garcia_carlos
 
-TODO BIEN
-

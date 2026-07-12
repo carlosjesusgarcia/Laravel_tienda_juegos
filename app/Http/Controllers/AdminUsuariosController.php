@@ -30,7 +30,7 @@ class AdminUsuariosController extends Controller
      */
     public function detalles(int $id)
     {
-        $usuario = User::with(['rol', 'compras.juego'])
+        $usuario = User::with(['rol', 'compras.juegos'])
             ->where('id', $id)
             ->firstOrFail();
 

@@ -8,15 +8,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Compra;
+use App\Models\CompraTieneJuego;
 use App\Models\User;
 use App\Models\Juego;
 
 /**
  * Clase ComprasSeeder
  *
- * Inserta compras de prueba asociadas a usuarios y juegos existentes.
- * Permite cumplir el requisito de visualizar productos o servicios contratados
- * dentro del detalle de usuario del panel administrador.
+ * Inserta una compra de prueba asociada a un usuario existente
+ * y registra los juegos incluidos mediante el modelo del detalle.
  */
 class ComprasSeeder extends Seeder
 {
@@ -31,28 +31,39 @@ class ComprasSeeder extends Seeder
         $superMarioBros = Juego::where('slug', 'super-mario-bros')->first();
         $zelda = Juego::where('slug', 'the-legend-of-zelda')->first();
 
-        Compra::create([
+        // Creamos la cabecera de la compra
+        $compra = Compra::create([
             'user_fk' => $luigi->id,
-            'juego_fk' => $pacMan->juego_id,
             'fecha_compra' => '2026-06-15',
-            'precio' => $pacMan->precio,
+            'total' => $pacMan->precio
+                + $superMarioBros->precio
+                + $zelda->precio,
             'estado' => 'completada',
         ]);
 
-        Compra::create([
-            'user_fk' => $luigi->id,
+        // Registramos los juegos incluidos en la compra
+        CompraTieneJuego::create([
+            'compra_fk' => $compra->compra_id,
+            'juego_fk' => $pacMan->juego_id,
+            'cantidad' => 1,
+            'precio_unitario' => $pacMan->precio,
+            'descripcion' => $pacMan->titulo,
+        ]);
+
+        CompraTieneJuego::create([
+            'compra_fk' => $compra->compra_id,
             'juego_fk' => $superMarioBros->juego_id,
-            'fecha_compra' => '2026-06-16',
-            'precio' => $superMarioBros->precio,
-            'estado' => 'completada',
+            'cantidad' => 1,
+            'precio_unitario' => $superMarioBros->precio,
+            'descripcion' => $superMarioBros->titulo,
         ]);
 
-        Compra::create([
-            'user_fk' => $luigi->id,
+        CompraTieneJuego::create([
+            'compra_fk' => $compra->compra_id,
             'juego_fk' => $zelda->juego_id,
-            'fecha_compra' => '2026-06-17',
-            'precio' => $zelda->precio,
-            'estado' => 'completada',
+            'cantidad' => 1,
+            'precio_unitario' => $zelda->precio,
+            'descripcion' => $zelda->titulo,
         ]);
     }
 }

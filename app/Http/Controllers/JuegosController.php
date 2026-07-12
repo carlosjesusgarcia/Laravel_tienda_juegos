@@ -211,6 +211,15 @@ class JuegosController extends Controller
     {
         $juego = Juego::where('slug', $id)->firstOrFail();
 
+        if($juego->detallesCompras()->count() > 0) {
+            return redirect()
+                ->route('juegos.listado')
+                ->with(
+                    'feedback.message',
+                    'El juego <b>' . e($juego->titulo) . '</b> no puede eliminarse porque forma parte de una compra registrada.'
+                );
+        }
+
         return view('juegos.eliminar', [
             'juego' => $juego,
         ]);
@@ -222,6 +231,15 @@ class JuegosController extends Controller
     public function eliminar(string $id)
     {
         $juego = Juego::where('slug', $id)->firstOrFail();
+
+        if($juego->detallesCompras()->count() > 0) {
+            return redirect()
+                ->route('juegos.listado')
+                ->with(
+                    'feedback.message',
+                    'El juego <b>' . e($juego->titulo) . '</b> no puede eliminarse porque forma parte de una compra registrada.'
+                );
+        }
 
         $portada = $juego->portada;
 

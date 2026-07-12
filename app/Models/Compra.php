@@ -1,7 +1,7 @@
 <?php
 /**
  * Archivo: Compra.php
- * Función: Modelo Eloquent que representa una compra realizada por un usuario sobre un videojuego del catálogo.
+ * Función: Modelo Eloquent que representa una compra realizada por un usuario sobre uno o varios videojuegos del catálogo.
  */
 
 namespace App\Models;
@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 /**
  * Clase Compra
  *
- * Representa la relación entre un usuario registrado y un juego comprado.
- * Permite consultar los datos propios de la compra, el usuario asociado y el juego adquirido.
+ * Representa una compra realizada por un usuario registrado.
+ * Permite consultar los datos propios de la compra, el usuario asociado y los juegos adquiridos.
  */
 class Compra extends Model
 {
@@ -27,15 +27,14 @@ class Compra extends Model
 
     protected $fillable = [
         'user_fk',
-        'juego_fk',
         'fecha_compra',
-        'precio',
+        'total',
         'estado',
     ];
 
     protected $casts = [
         'fecha_compra' => 'date',
-        'precio' => 'integer',
+        'total' => 'integer',
     ];
 
     /**
@@ -51,24 +50,43 @@ class Compra extends Model
     }
 
     /**
-     * Define la relación con el juego comprado.
+     * Define la relación con los detalles incluidos en la compra.
      */
-    public function juego()
+    public function detalles()
     {
-        return $this->belongsTo(
-            Juego::class,
-            'juego_fk',
-            'juego_id'
+        return $this->hasMany(
+            CompraTieneJuego::class,
+            'compra_fk',
+            'compra_id'
         );
     }
 
     /**
-     * Configura el accesor y mutador para el atributo 'precio'.
+     * Define la relación con los juegos incluidos en la compra.
+     */
+    public function juegos()
+    {
+        return $this->belongsToMany(
+            Juego::class,
+            'compras_tienen_juegos',
+            'compra_fk',
+            'juego_fk',
+            'compra_id',
+            'juego_id'
+        )->withPivot(
+            'cantidad',
+            'precio_unitario',
+            'descripcion'
+        );
+    }
+
+    /**
+     * Configura el accesor y mutador para el atributo 'total'.
      *
      * Mantiene el mismo criterio usado en el modelo Juego:
-     * el precio se almacena como entero en la base de datos y se muestra dividido por 100.
+     * el total se almacena como entero en la base de datos y se muestra dividido por 100.
      */
-    public function precio(): Attribute
+    public function total(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,

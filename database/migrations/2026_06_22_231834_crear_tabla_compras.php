@@ -14,19 +14,14 @@ return new class extends Migration
         Schema::create('compras', function (Blueprint $table) {
             $table->id('compra_id');
             $table->unsignedBigInteger('user_fk');
-            $table->unsignedBigInteger('juego_fk');
             $table->date('fecha_compra');
-            $table->unsignedInteger('precio');
+            $table->unsignedInteger('total');
             $table->string('estado', 30);
             $table->timestamps();
 
             $table->foreign('user_fk')
                 ->references('id')
                 ->on('users');
-
-            $table->foreign('juego_fk')
-                ->references('juego_id')
-                ->on('juegos');
         });
     }
 
