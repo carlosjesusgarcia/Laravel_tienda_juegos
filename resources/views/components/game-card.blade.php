@@ -48,9 +48,19 @@
                     VER DETALLES
                 </a>
 
-                <a href="{{ route('juegos.detalles', $juego) }}" class="btn vhs-btn w-100">
-                    COMPRAR
-                </a>
+                @auth
+                    <form action="{{ route('carrito.agregar', $juego->slug) }}" method="post">
+                        @csrf
+
+                        <button type="submit" class="btn vhs-btn w-100">
+                            COMPRAR
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn vhs-btn w-100">
+                        COMPRAR
+                    </a>
+                @endauth
 
                 @auth
                     @if(Auth::user()->rol_fk == 1)

@@ -37,6 +37,20 @@
 
                 {{-- @auth muestra su contenido solo a los usuarios SÍ logueados --}}
                 @auth
+                    <li class="nav-item">
+                        <x-nav-link active-route="perfil.index">Mi perfil</x-nav-link>
+                    </li>
+
+                    <li class="nav-item">
+                        <x-nav-link active-route="compras.index">Mis compras</x-nav-link>
+                    </li>
+
+                    <li class="nav-item">
+                        <x-nav-link active-route="carrito.index">
+                            Carrito ({{ array_sum(session('carrito', [])) }})
+                        </x-nav-link>
+                    </li>
+
                     @if(auth()->user()->rol_fk == 1)
                         <li class="nav-item">
                             <x-nav-link active-route="admin.index">Panel Admin</x-nav-link>

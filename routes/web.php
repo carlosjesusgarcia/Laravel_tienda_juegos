@@ -36,6 +36,78 @@ Route::post('/cerrar-sesion', [\App\Http\Controllers\AuthController::class, 'log
 
 /**
  * |--------------------------------------------------------------------------
+ * | Rutas del Perfil
+ * |--------------------------------------------------------------------------
+ * | Permiten que el usuario autenticado consulte y actualice sus datos
+ * | personales y visualice su historial de compras.
+ */
+
+Route::get('/perfil', [\App\Http\Controllers\PerfilController::class, 'index'])
+    ->name('perfil.index')
+    ->middleware('auth');
+
+Route::get('/perfil/editar', [\App\Http\Controllers\PerfilController::class, 'editar'])
+    ->name('perfil.editar')
+    ->middleware('auth');
+
+Route::put('/perfil/editar', [\App\Http\Controllers\PerfilController::class, 'actualizar'])
+    ->name('perfil.actualizar')
+    ->middleware('auth');
+
+/**
+ * |--------------------------------------------------------------------------
+ * | Rutas del Carrito de Compras
+ * |--------------------------------------------------------------------------
+ * | Administran los juegos almacenados temporalmente en la sesión
+ * | del usuario autenticado.
+ */
+
+Route::get('/carrito', [\App\Http\Controllers\CarritoController::class, 'index'])
+    ->name('carrito.index')
+    ->middleware('auth');
+
+Route::post('/carrito/{id}', [\App\Http\Controllers\CarritoController::class, 'agregar'])
+    ->name('carrito.agregar')
+    ->middleware('auth');
+
+Route::put('/carrito/{id}', [\App\Http\Controllers\CarritoController::class, 'actualizar'])
+    ->name('carrito.actualizar')
+    ->middleware('auth');
+
+Route::delete('/carrito/{id}', [\App\Http\Controllers\CarritoController::class, 'eliminar'])
+    ->name('carrito.eliminar')
+    ->middleware('auth');
+
+Route::delete('/carrito', [\App\Http\Controllers\CarritoController::class, 'vaciar'])
+    ->name('carrito.vaciar')
+    ->middleware('auth');
+
+/**
+ * |--------------------------------------------------------------------------
+ * | Rutas de Compras
+ * |--------------------------------------------------------------------------
+ * | Permiten confirmar y registrar una compra, consultar el historial
+ * | y visualizar el detalle de cada pedido.
+ */
+
+Route::get('/compras', [\App\Http\Controllers\CompraController::class, 'index'])
+    ->name('compras.index')
+    ->middleware('auth');
+
+Route::get('/compras/confirmar', [\App\Http\Controllers\CompraController::class, 'confirmar'])
+    ->name('compras.confirmar')
+    ->middleware('auth');
+
+Route::post('/compras/guardar', [\App\Http\Controllers\CompraController::class, 'guardar'])
+    ->name('compras.guardar')
+    ->middleware('auth');
+
+Route::get('/compras/{id}', [\App\Http\Controllers\CompraController::class, 'detalles'])
+    ->name('compras.detalles')
+    ->middleware('auth');
+
+/**
+ * |--------------------------------------------------------------------------
  * | Rutas del Panel de Administración
  * |--------------------------------------------------------------------------
  * | Rutas restringidas para usuarios autenticados con rol administrador.
