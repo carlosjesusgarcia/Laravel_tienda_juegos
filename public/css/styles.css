@@ -1,168 +1,733 @@
-/* Estructura base */
-html, body, #app {
-    height: 100%;
+/* =========================================================
+   VARIABLES GENERALES
+   Tema oscuro minimalista con identidad retro moderada
+   ========================================================= */
+
+:root {
+    --color-fondo: #0b111e;
+    --color-superficie: #111827;
+    --color-superficie-elevada: #182235;
+    --color-borde: #334155;
+    --color-borde-suave: rgba(148, 163, 184, 0.18);
+
+    --color-texto: #ffffff;
+    --color-texto-secundario: #f7f7f7;
+    --color-texto-suave: #f7f7f7;
+
+    --color-primario: #38bdf8;
+    --color-primario-hover: #7dd3fc;
+    --color-primario-oscuro: #082f49;
+
+    --color-acento: #f59e0b;
+    --color-acento-hover: #fbbf24;
+
+    --color-peligro: #fb7185;
+    --color-peligro-hover: #fda4af;
+
+    --radio-pequeno: 6px;
+    --radio-medio: 10px;
+    --radio-grande: 14px;
+
+    --sombra-suave: 0 8px 24px rgba(0, 0, 0, 0.24);
+    --sombra-hover: 0 14px 32px rgba(0, 0, 0, 0.34);
+
+    --transicion: 0.2s ease;
+}
+
+/* =========================================================
+   ESTRUCTURA BASE
+   ========================================================= */
+
+html,
+body,
+#app {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
 #app {
     display: flex;
     flex-direction: column;
-    background-color: #0d0d0d; /* Negro profundo */
-    color: #e0e0e0;
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(56, 189, 248, 0.06),
+            transparent 34rem
+        ),
+        var(--color-fondo);
+    color: var(--color-texto);
 }
 
-/* Sobrescritura de Bootstrap para el toque retro */
-.vhs-card {
-    background-color: #1a1a1a !important;
-    border: 3px solid #f0e0d0 !important; /* Borde color etiqueta vieja */
-    transition: transform 0.3s;
+main {
+    flex: 1;
 }
 
-.vhs-card:hover {
-    transform: scale(1.05);
-    border-color: #00ffff !important; /* Brillo neón al pasar el ratón */
-    box-shadow: 0 0 15px #ff00ff;
+img {
+    max-width: 100%;
+    height: auto;
 }
 
-.vhs-btn {
-    border: 2px solid #ff8800 !important;
-    color: #ff8800 !important;
-    text-transform: uppercase;
-    font-weight: bold;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-texto);
+    font-weight: 700;
+    line-height: 1.25;
 }
 
-.vhs-btn:hover {
-    background-color: #ff8800 !important;
-    color: #000 !important;
+p {
+    color: var(--color-texto-secundario);
 }
 
-/* Efecto de líneas CRT  (SUAVIZADO)*/
-body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* opacidad al 7% para que sea visible pero sutil */
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 50%,
-        rgba(0, 0, 0, 0.07) 50%
-    );
-    /* 4px mantiene la textura retro sin tachar los textos */
-    background-size: 100% 4px;
-    z-index: 9999;
-    pointer-events: none;
+a {
+    color: var(--color-primario);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition:
+        color var(--transicion),
+        text-decoration-color var(--transicion);
 }
 
-/* Seguro contra bloqueos de clics en la navegación */
+a:hover {
+    color: var(--color-primario-hover);
+}
+
+/* =========================================================
+   ACCESIBILIDAD Y FOCO
+   ========================================================= */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid rgba(56, 189, 248, 0.45);
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
 .navbar {
     position: relative;
-    z-index: 10000;
+    z-index: 100;
+    background-color: rgba(11, 17, 30, 0.96) !important;
+    border-bottom: 1px solid var(--color-borde-suave);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
 }
 
-/* Link activo del navbar con estética neon */
+.navbar-brand {
+    color: var(--color-texto) !important;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.navbar .nav-link {
+    color: var(--color-texto-secundario) !important;
+    font-weight: 600;
+    border-radius: var(--radio-pequeno);
+    transition:
+        color var(--transicion),
+        background-color var(--transicion);
+}
+
+.navbar .nav-link:hover {
+    color: var(--color-texto) !important;
+    background-color: rgba(56, 189, 248, 0.08);
+}
+
 .navbar .nav-link.active {
-    color: #ff3355 !important;
+    color: var(--color-primario-hover) !important;
+    background-color: rgba(56, 189, 248, 0.12);
     font-weight: 700;
-    text-shadow:
-        0 0 4px rgba(255, 51, 85, 0.7),
-        0 0 10px rgba(255, 51, 85, 0.45);
+    text-shadow: none;
 }
 
-/* Botón azul eléctrico estilo VHS */
+/* =========================================================
+   TARJETAS
+   Juegos y publicaciones
+   ========================================================= */
+
+.card,
+.vhs-card {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    color: var(--color-texto);
+    background-color: #243247 !important;
+    border: 1px solid rgba(148, 163, 184, 0.34) !important;
+    border-radius: var(--radio-grande);
+    box-shadow: var(--sombra-suave);
+
+    margin-bottom: 1.75rem;
+
+    transition:
+        background-color var(--transicion),
+        transform var(--transicion),
+        border-color var(--transicion),
+        box-shadow var(--transicion);
+}
+
+.card:hover,
+.vhs-card:hover {
+    background-color: #2a3a52 !important;
+    transform: translateY(-4px);
+    border-color: rgba(56, 189, 248, 0.65) !important;
+    box-shadow: var(--sombra-hover);
+}
+
+.card .card-body,
+.vhs-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+}
+
+.card .card-title,
+.vhs-card .card-title {
+    margin-bottom: 0.75rem;
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.card .card-subtitle,
+.vhs-card .card-subtitle {
+    margin-bottom: 0.75rem;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.card .card-text,
+.vhs-card .card-text {
+    color: #dbe4ef;
+    line-height: 1.65;
+}
+
+.card .text-muted,
+.vhs-card .text-muted {
+    color: #ffffff !important;
+}
+
+.card img,
+.card .card-img-top,
+.vhs-card img,
+.vhs-card .card-img-top {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    background-color: #182235;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.card .card-footer,
+.vhs-card .card-footer {
+    margin-top: auto;
+    padding: 1rem 1.25rem;
+    color: #dbe4ef;
+    background-color: rgba(15, 23, 42, 0.38);
+    border-top: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+/* Separación adicional entre filas de tarjetas */
+
+.row:has(.card),
+.row:has(.vhs-card) {
+    row-gap: 0.75rem;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    --bs-secondary-color: var(--color-texto-secundario);
+    --bs-secondary-rgb: var(--color-texto-secundario-rgb);
+
+    display: flex;
+    min-height: 7rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 1.5rem 1rem;
+    background:
+        linear-gradient(
+            170deg,
+            var(--color-superficie) 0%,
+            var(--color-superficie-alternativa) 60%,
+            var(--color-superficie) 100%
+        );
+    border-top: 1px solid var(--color-borde);
+    color: var(--color-blanco);
+    text-align: center;
+}
+
+.footer p {
+    margin: 0;
+    color: var(--color-blanco);
+    font-weight: 500;
+}
+
+.footer small,
+.footer .text-muted {
+    color: var(--color-texto-secundario);
+}
+
+.footer a {
+    color: var(--color-primario-claro);
+}
+
+.footer a:hover,
+.footer a:focus {
+    color: var(--color-primario-hover);
+}
+
+
+
+/* =========================================================
+   BOTONES GENERALES
+   ========================================================= */
+
+.vhs-btn,
+.btn-vhs-cyan,
+.btn-vhs-yellow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    min-height: 42px;
+    padding: 0.65rem 1rem;
+
+    border-radius: var(--radio-medio);
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none !important;
+    text-transform: none;
+    letter-spacing: 0.01em;
+
+    transition:
+        color var(--transicion),
+        background-color var(--transicion),
+        border-color var(--transicion),
+        transform var(--transicion),
+        box-shadow var(--transicion);
+}
+
+.vhs-btn:hover,
+.btn-vhs-cyan:hover,
+.btn-vhs-yellow:hover {
+    transform: translateY(-2px);
+}
+
+/* Botón principal */
+
 .btn-vhs-cyan {
-    border: 2px solid #00ffff !important;
-    color: #00ffff !important;
-    text-transform: uppercase;
-    font-weight: bold;
-    background: transparent;
-    transition: all 0.3s;
+    color: #03131d !important;
+    background-color: var(--color-primario) !important;
+    border: 1px solid var(--color-primario) !important;
 }
 
 .btn-vhs-cyan:hover {
-    background-color: #00ffff !important;
-    color: #000 !important;
-    box-shadow: 0 0 15px #00ffff;
+    color: #020617 !important;
+    background-color: var(--color-primario-hover) !important;
+    border-color: var(--color-primario-hover) !important;
+    box-shadow: 0 8px 18px rgba(56, 189, 248, 0.2);
 }
 
-/* Botón amarillo eléctrico estilo VHS */
+/* Botón secundario */
+
+.vhs-btn {
+    color: var(--color-acento-hover) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(245, 158, 11, 0.65) !important;
+}
+
+.vhs-btn:hover {
+    color: #1c1002 !important;
+    background-color: var(--color-acento-hover) !important;
+    border-color: var(--color-acento-hover) !important;
+    box-shadow: 0 8px 18px rgba(245, 158, 11, 0.16);
+}
+
+/* Botón alternativo */
+
 .btn-vhs-yellow {
-    border: 2px solid #eaff00 !important;
-    color: #eaff00 !important;
-    text-transform: uppercase;
-    font-weight: bold;
-    background: transparent;
-    transition: all 0.3s ease-in-out;
-    padding: 10px 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none !important;
+    color: var(--color-acento-hover) !important;
+    background-color: rgba(245, 158, 11, 0.06) !important;
+    border: 1px solid rgba(245, 158, 11, 0.5) !important;
 }
 
 .btn-vhs-yellow:hover {
-    background-color: #eaff00 !important;
-    color: #000 !important;
-    box-shadow: 0 0 20px #eaff00;
-    transform: scale(1.05); /* Pequeño efecto de pulsado */
+    color: #1c1002 !important;
+    background-color: var(--color-acento-hover) !important;
+    border-color: var(--color-acento-hover) !important;
+    box-shadow: 0 8px 18px rgba(245, 158, 11, 0.16);
 }
 
-/* --- ESTILOS PÁGINA 404 --- */
+/* =========================================================
+   BOOTSTRAP: BOTONES Y CONTROLES
+   ========================================================= */
+
+.btn {
+    border-radius: var(--radio-medio);
+    font-weight: 600;
+}
+
+.btn-primary {
+    color: #03131d;
+    background-color: var(--color-primario);
+    border-color: var(--color-primario);
+}
+
+.btn-primary:hover {
+    color: #020617;
+    background-color: var(--color-primario-hover);
+    border-color: var(--color-primario-hover);
+}
+
+.btn-outline-primary {
+    color: var(--color-primario-hover);
+    border-color: rgba(56, 189, 248, 0.65);
+}
+
+.btn-outline-primary:hover {
+    color: #020617;
+    background-color: var(--color-primario-hover);
+    border-color: var(--color-primario-hover);
+}
+
+.btn-danger {
+    color: #1f0509;
+    background-color: var(--color-peligro);
+    border-color: var(--color-peligro);
+}
+
+.btn-danger:hover {
+    color: #1f0509;
+    background-color: var(--color-peligro-hover);
+    border-color: var(--color-peligro-hover);
+}
+
+/* =========================================================
+   FORMULARIOS
+   Buscadores y filtros con contraste reforzado
+   ========================================================= */
+
+.form-label {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.form-control,
+.form-select {
+    min-height: 44px;
+    color: #f8fafc;
+    background-color: #243247;
+    border: 1px solid #64748b;
+    border-radius: var(--radio-medio);
+}
+
+.form-control:hover,
+.form-select:hover {
+    border-color: #94a3b8;
+    background-color: #29384f;
+}
+
+.form-control::placeholder {
+    color: #cbd5e1;
+    opacity: 1;
+}
+
+.form-control:focus,
+.form-select:focus {
+    color: #ffffff;
+    background-color: #2a3a52;
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 0.22rem rgba(56, 189, 248, 0.24);
+}
+
+.form-select option {
+    color: #f8fafc;
+    background-color: #243247;
+}
+
+.form-text {
+    color: #cbd5e1;
+}
+
+.input-group-text {
+    color: #f8fafc;
+    background-color: #334155;
+    border-color: #64748b;
+}
+
+textarea.form-control {
+    min-height: 130px;
+}
+
+/* =========================================================
+   TABLAS
+   ========================================================= */
+
+.table {
+    --bs-table-color: var(--color-texto-secundario);
+    --bs-table-bg: var(--color-superficie);
+    --bs-table-border-color: var(--color-borde-suave);
+    --bs-table-striped-color: var(--color-texto-secundario);
+    --bs-table-striped-bg: rgba(148, 163, 184, 0.04);
+    --bs-table-hover-color: var(--color-texto);
+    --bs-table-hover-bg: rgba(56, 189, 248, 0.07);
+
+    overflow: hidden;
+    border: 1px solid var(--color-borde-suave);
+    border-radius: var(--radio-medio);
+}
+
+.table thead th {
+    color: var(--color-texto);
+    background-color: var(--color-superficie-elevada);
+    font-weight: 700;
+}
+
+/* =========================================================
+   ALERTAS
+   ========================================================= */
+
+.alert {
+    border-width: 1px;
+    border-radius: var(--radio-medio);
+}
+
+.alert-success {
+    color: #d1fae5;
+    background-color: rgba(16, 185, 129, 0.12);
+    border-color: rgba(52, 211, 153, 0.4);
+}
+
+.alert-danger {
+    color: #ffe4e6;
+    background-color: rgba(244, 63, 94, 0.12);
+    border-color: rgba(251, 113, 133, 0.45);
+}
+
+.alert-warning {
+    color: #fef3c7;
+    background-color: rgba(245, 158, 11, 0.12);
+    border-color: rgba(251, 191, 36, 0.42);
+}
+
+.alert-info {
+    color: #e0f2fe;
+    background-color: rgba(14, 165, 233, 0.12);
+    border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* =========================================================
+   PÁGINA 404
+   Conserva la identidad retro sin perjudicar la lectura
+   ========================================================= */
+
 .body-404 {
-    background-color: #050505;
-    color: #ff00ff;
-    font-family: 'Courier New', Courier, monospace;
-    height: 100vh;
+    min-height: 100vh;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    margin: 0;
+
+    color: var(--color-texto);
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(56, 189, 248, 0.1),
+            transparent 38rem
+        ),
+        #050914;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
 }
 
 .body-404::before {
-    content: " ";
-    display: block;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    z-index: 2;
-    background-size: 100% 4px, 3px 100%;
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
     pointer-events: none;
+
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 3px,
+        rgba(0, 0, 0, 0.08) 4px
+    );
 }
 
 .error-container {
+    position: relative;
+    z-index: 2;
+    width: min(90%, 680px);
+    padding: 2.5rem;
     text-align: center;
-    z-index: 3;
-    padding: 20px;
-    border: 2px solid #ff00ff;
-    box-shadow: 0 0 15px #ff00ff;
-    background: rgba(0, 0, 0, 0.8);
+
+    background-color: rgba(11, 17, 30, 0.94);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: var(--radio-grande);
+    box-shadow: var(--sombra-hover);
 }
 
 .glitch {
-    font-size: 5rem;
-    font-weight: bold;
-    text-transform: uppercase;
     position: relative;
-    text-shadow: 0.05em 0 0 #00ffff, -0.05em -0.025em 0 #ff00ff;
-    animation: glitch 1s infinite;
-}
+    margin-bottom: 1rem;
 
-@keyframes glitch {
-    0% { text-shadow: 0.05em 0 0 #00ffff, -0.05em -0.025em 0 #ff00ff; }
-    14% { text-shadow: 0.05em 0 0 #00ffff, -0.05em -0.025em 0 #ff00ff; }
-    15% { text-shadow: -0.05em -0.025em 0 #00ffff, 0.025em 0.025em 0 #ff00ff; }
-    49% { text-shadow: -0.05em -0.025em 0 #00ffff, 0.025em 0.025em 0 #ff00ff; }
-    50% { text-shadow: 0.025em 0.05em 0 #00ffff, 0.05em 0 0 #ff00ff; }
-    99% { text-shadow: 0.025em 0.05em 0 #00ffff, 0.05em 0 0 #ff00ff; }
-    100% { text-shadow: -0.025em 0 0 #00ffff, -0.025em -0.025em 0 #ff00ff; }
+    color: var(--color-texto);
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+
+    text-shadow:
+        3px 0 rgba(56, 189, 248, 0.65),
+        -3px 0 rgba(251, 113, 133, 0.55);
+
+    animation: glitch-suave 3s infinite;
 }
 
 .msg-sub {
-    color: #00ffff;
-    margin-bottom: 30px;
-    letter-spacing: 3px;
+    margin-bottom: 2rem;
+    color: var(--color-primario-hover);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+}
+
+@keyframes glitch-suave {
+    0%,
+    92%,
+    100% {
+        transform: translate(0);
+        text-shadow:
+            3px 0 rgba(56, 189, 248, 0.65),
+            -3px 0 rgba(251, 113, 133, 0.55);
+    }
+
+    94% {
+        transform: translate(-2px, 1px);
+        text-shadow:
+            -3px 0 rgba(56, 189, 248, 0.65),
+            3px 0 rgba(251, 113, 133, 0.55);
+    }
+
+    96% {
+        transform: translate(2px, -1px);
+    }
+
+    98% {
+        transform: translate(-1px, 0);
+    }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+    .vhs-card:hover {
+        transform: none;
+    }
+
+    .vhs-btn,
+    .btn-vhs-cyan,
+    .btn-vhs-yellow {
+        width: 100%;
+    }
+
+    .error-container {
+        padding: 1.75rem 1.25rem;
+    }
+}
+
+/* =========================================================
+   MOVIMIENTO REDUCIDO
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .vhs-card:hover,
+    .vhs-btn:hover,
+    .btn-vhs-cyan:hover,
+    .btn-vhs-yellow:hover {
+        transform: none;
+    }
+}
+
+/* =========================================================
+   PAGINACIÓN
+   ========================================================= */
+
+/* =========================================================
+   PAGINACIÓN
+   ========================================================= */
+
+.pagination .page-link {
+    background-color: var(--color-superficie) !important;
+    border-color: var(--color-borde-suave) !important;
+    color: var(--color-texto-secundario) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--color-primario) !important;
+    border-color: var(--color-primario) !important;
+    color: var(--color-primario-oscuro) !important;
+}
+
+.pagination .page-link:hover {
+    background-color: var(--color-superficie-elevada) !important;
+    color: var(--color-texto) !important;
+}
+
+/* mejora en contraste */
+.text-secondary {
+    color: #ffffff !important;
+    --bs-secondary-color: #ffffff !important;
+    --bs-secondary-rgb: 255, 255, 255 !important;
 }

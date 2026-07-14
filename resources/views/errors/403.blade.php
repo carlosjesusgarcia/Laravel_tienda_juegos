@@ -3,5 +3,7 @@
     code="ERROR 403"
     message="NIVEL DE SEGURIDAD INSUFICIENTE"
 >
-    Tu firma digital no tiene los permisos necesarios para acceder a este núcleo de datos.
+    <p class="mb-0">
+        Tu firma digital no tiene los permisos necesarios para acceder a este núcleo de datos.
+    </p>
 </x-errors-layout>

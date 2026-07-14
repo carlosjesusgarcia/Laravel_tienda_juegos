@@ -16,19 +16,28 @@
 
         <div class="row g-4">
             <div class="col-md-4">
-                <a href="{{ route('juegos.crear') }}" class="btn btn-vhs-cyan w-100 fw-bold">
+                <a
+                    href="{{ route('juegos.crear') }}"
+                    class="btn btn-vhs-cyan w-100 fw-bold"
+                >
                     [ REGISTRAR NUEVO JUEGO ]
                 </a>
             </div>
 
             <div class="col-md-4">
-                <a href="{{ route('posts.crear') }}" class="btn btn-vhs-cyan w-100 fw-bold">
+                <a
+                    href="{{ route('posts.crear') }}"
+                    class="btn btn-vhs-cyan w-100 fw-bold"
+                >
                     [ PUBLICAR NUEVA ENTRADA ]
                 </a>
             </div>
 
             <div class="col-md-4">
-                <a href="{{ route('admin.usuarios.index') }}" class="btn btn-vhs-cyan w-100 fw-bold">
+                <a
+                    href="{{ route('admin.usuarios.index') }}"
+                    class="btn btn-vhs-cyan w-100 fw-bold"
+                >
                     [ VER USUARIOS ]
                 </a>
             </div>

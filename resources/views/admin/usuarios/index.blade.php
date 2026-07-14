@@ -18,10 +18,10 @@
             <table class="table table-dark table-bordered border-secondary align-middle mb-0">
                 <thead>
                     <tr>
-                        <th>Usuario</th>
-                        <th>Email</th>
-                        <th>Rol</th>
-                        <th>Detalle</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Detalle</th>
                     </tr>
                 </thead>
 
@@ -32,7 +32,10 @@
                             <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->rol->nombre }}</td>
                             <td>
-                                <a href="{{ route('admin.usuarios.detalles', $usuario->id) }}" class="btn btn-vhs-cyan fw-bold btn-sm">
+                                <a
+                                    href="{{ route('admin.usuarios.detalles', $usuario->id) }}"
+                                    class="btn btn-vhs-cyan fw-bold btn-sm"
+                                >
                                     [ VER ]
                                 </a>
                             </td>

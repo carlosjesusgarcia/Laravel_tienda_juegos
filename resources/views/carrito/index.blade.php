@@ -1,14 +1,22 @@
 <x-principal-layout>
     <x-slot:title>Carrito de Compras</x-slot:title>
 
-    <article class="container py-5">
+    <section
+        class="container py-5"
+        aria-labelledby="titulo-carrito"
+    >
         <div class="mb-4">
-            <a href="{{ route('juegos.listado') }}" class="btn btn-vhs-yellow">
-                <i class="bi bi-arrow-left"></i> [ VOLVER AL ARCHIVO ]
+            <a
+                href="{{ route('juegos.listado') }}"
+                class="btn btn-vhs-yellow"
+            >
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                [ VOLVER AL ARCHIVO ]
             </a>
         </div>
 
         <h1
+            id="titulo-carrito"
             class="display-3 fw-bold text-uppercase mb-2"
             style="color: #ff3355; text-shadow: 0 0 10px rgba(255, 51, 85, 0.6);"
         >
@@ -20,20 +28,29 @@
         </p>
 
         @error('cantidad')
-            <div class="alert alert-danger mb-4">
+            <div
+                class="alert alert-danger mb-4"
+                role="alert"
+            >
                 {{ $message }}
             </div>
         @enderror
 
         @if(count($productosCarrito) > 0)
             <section aria-labelledby="productos-carrito">
-                <h2 id="productos-carrito" class="visually-hidden">
+                <h2
+                    id="productos-carrito"
+                    class="visually-hidden"
+                >
                     Juegos agregados al carrito
                 </h2>
 
                 <div class="row g-4">
                     @foreach($productosCarrito as $producto)
-                        <article class="col-12">
+                        <article
+                            class="col-12"
+                            aria-labelledby="titulo-producto-{{ $producto['juego']->juego_id }}"
+                        >
                             <div class="vhs-card p-4 shadow-lg">
                                 <div class="row align-items-center g-4">
                                     <div class="col-md-2">
@@ -51,7 +68,10 @@
                                     </div>
 
                                     <div class="col-md-4">
-                                        <h3 class="h3 text-danger fw-bold text-uppercase mb-2">
+                                        <h3
+                                            id="titulo-producto-{{ $producto['juego']->juego_id }}"
+                                            class="h3 text-danger fw-bold text-uppercase mb-2"
+                                        >
                                             {{ $producto['juego']->titulo }}
                                         </h3>
 
@@ -77,6 +97,7 @@
                                         <form
                                             action="{{ route('carrito.actualizar', $producto['juego']) }}"
                                             method="post"
+                                            novalidate
                                         >
                                             @csrf
                                             @method('PUT')
@@ -102,7 +123,10 @@
                                                     class="btn btn-vhs-yellow"
                                                     aria-label="Actualizar cantidad de {{ $producto['juego']->titulo }}"
                                                 >
-                                                    <i class="bi bi-arrow-clockwise"></i>
+                                                    <i
+                                                        class="bi bi-arrow-clockwise"
+                                                        aria-hidden="true"
+                                                    ></i>
                                                 </button>
                                             </div>
                                         </form>
@@ -120,6 +144,7 @@
                                         <form
                                             action="{{ route('carrito.eliminar', $producto['juego']) }}"
                                             method="post"
+                                            novalidate
                                         >
                                             @csrf
                                             @method('DELETE')
@@ -128,7 +153,11 @@
                                                 type="submit"
                                                 class="btn btn-outline-danger btn-sm"
                                             >
-                                                <i class="bi bi-trash"></i> ELIMINAR
+                                                <i
+                                                    class="bi bi-trash"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                ELIMINAR
                                             </button>
                                         </form>
                                     </div>
@@ -141,11 +170,15 @@
 
             <section
                 class="p-4 mt-5"
+                aria-labelledby="titulo-total-pedido"
                 style="background-color: #1a1a1a; border-left: 4px solid #ff8800;"
             >
                 <div class="row align-items-center g-4">
                     <div class="col-md-6">
-                        <h2 class="h3 text-secondary fw-bold text-uppercase mb-2">
+                        <h2
+                            id="titulo-total-pedido"
+                            class="h3 text-secondary fw-bold text-uppercase mb-2"
+                        >
                             Total del pedido
                         </h2>
 
@@ -159,28 +192,47 @@
                             href="{{ route('compras.confirmar') }}"
                             class="btn vhs-btn btn-lg w-100 py-3"
                         >
-                            <i class="bi bi-cart-check"></i> CONFIRMAR COMPRA
+                            <i
+                                class="bi bi-cart-check"
+                                aria-hidden="true"
+                            ></i>
+                            CONFIRMAR COMPRA
                         </a>
                     </div>
                 </div>
             </section>
 
             <div class="mt-4">
-                <form action="{{ route('carrito.vaciar') }}" method="post">
+                <form
+                    action="{{ route('carrito.vaciar') }}"
+                    method="post"
+                    novalidate
+                >
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit" class="btn btn-outline-danger">
-                        <i class="bi bi-trash"></i> [ VACIAR CARRITO ]
+                    <button
+                        type="submit"
+                        class="btn btn-outline-danger"
+                    >
+                        <i
+                            class="bi bi-trash"
+                            aria-hidden="true"
+                        ></i>
+                        [ VACIAR CARRITO ]
                     </button>
                 </form>
             </div>
         @else
             <section
                 class="p-4"
+                aria-labelledby="titulo-carrito-vacio"
                 style="background-color: #1a1a1a; border-left: 4px solid #ff8800;"
             >
-                <h2 class="h2 text-uppercase text-secondary fw-bold mb-3">
+                <h2
+                    id="titulo-carrito-vacio"
+                    class="text-uppercase text-secondary fw-bold mb-3"
+                >
                     Carrito vacío
                 </h2>
 
@@ -188,10 +240,17 @@
                     Todavía no agregaste ningún cartucho al carrito de compras.
                 </p>
 
-                <a href="{{ route('juegos.listado') }}" class="btn vhs-btn btn-lg">
-                    <i class="bi bi-controller"></i> VER CATÁLOGO
+                <a
+                    href="{{ route('juegos.listado') }}"
+                    class="btn vhs-btn btn-lg"
+                >
+                    <i
+                        class="bi bi-controller"
+                        aria-hidden="true"
+                    ></i>
+                    VER CATÁLOGO
                 </a>
             </section>
         @endif
-    </article>
+    </section>
 </x-principal-layout>

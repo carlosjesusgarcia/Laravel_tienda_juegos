@@ -1,27 +1,33 @@
-@props(['post'])
-
-<article class="card mb-4 vhs-card bg-black">
+<article class="card mb-4 vhs-card">
     <div class="row g-0">
 
         <div class="col-md-4 d-flex align-items-center p-2">
             @if($post->imagen !== null && \Storage::exists($post->imagen))
-                <img src="{{ \Storage::url($post->imagen) }}" class="img-fluid rounded" alt="{{ $post->imagen_descripcion ?? 'Imagen de la entrada ' . $post->titulo }}">
+                <img
+                    src="{{ \Storage::url($post->imagen) }}"
+                    class="img-fluid rounded"
+                    alt="{{ $post->imagen_descripcion ?? 'Imagen de la entrada ' . $post->titulo }}"
+                >
             @else
-                <img src="{{ url('img/fallback-vhs.jpg') }}" class="img-fluid rounded" alt="Entrada sin imagen disponible">
+                <img
+                    src="{{ url('img/fallback-vhs.jpg') }}"
+                    class="img-fluid rounded"
+                    alt="Entrada sin imagen disponible"
+                >
             @endif
         </div>
 
         <div class="col-md-8">
             <div class="card-body d-flex flex-column h-100 p-4">
 
-                <h4 class="card-title text-danger fw-bold">
+                <h3 class="h4 card-title text-danger fw-bold">
                     {{ $post->titulo }}
-                </h4>
+                </h3>
 
                 @if($post->subtitulo)
-                    <h6 class="card-subtitle mb-2 text-warning">
+                    <p class="card-subtitle mb-2 text-warning">
                         {{ $post->subtitulo }}
-                    </h6>
+                    </p>
                 @endif
 
                 <p class="card-text text-secondary mt-3 mb-4">

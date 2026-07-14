@@ -5,13 +5,13 @@
                 {{-- Previous Page Link --}}
                 @if ($paginator->onFirstPage())
                     <li class="page-item disabled" aria-disabled="true">
-                        <span class="page-link bg-black text-secondary border-warning fw-bold">
+                        <span class="page-link   text-secondary border-warning fw-bold">
                             Anterior
                         </span>
                     </li>
                 @else
                     <li class="page-item">
-                        <a class="page-link bg-black text-warning border-warning fw-bold" href="{{ $paginator->previousPageUrl() }}" rel="prev">
+                        <a class="page-link   text-warning border-warning fw-bold" href="{{ $paginator->previousPageUrl() }}" rel="prev">
                             Anterior
                         </a>
                     </li>
@@ -20,13 +20,13 @@
                 {{-- Next Page Link --}}
                 @if ($paginator->hasMorePages())
                     <li class="page-item">
-                        <a class="page-link bg-black text-warning border-warning fw-bold" href="{{ $paginator->nextPageUrl() }}" rel="next">
+                        <a class="page-link   text-warning border-warning fw-bold" href="{{ $paginator->nextPageUrl() }}" rel="next">
                             Siguiente
                         </a>
                     </li>
                 @else
                     <li class="page-item disabled" aria-disabled="true">
-                        <span class="page-link bg-black text-secondary border-warning fw-bold">
+                        <span class="page-link   text-secondary border-warning fw-bold">
                             Siguiente
                         </span>
                     </li>
@@ -50,13 +50,13 @@
                     {{-- Previous Page Link --}}
                     @if ($paginator->onFirstPage())
                         <li class="page-item disabled" aria-disabled="true" aria-label="Anterior">
-                            <span class="page-link bg-black text-secondary border-warning fw-bold" aria-hidden="true">
+                            <span class="page-link   text-secondary border-warning fw-bold" aria-hidden="true">
                                 &lsaquo;
                             </span>
                         </li>
                     @else
                         <li class="page-item">
-                            <a class="page-link bg-black text-warning border-warning fw-bold" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Anterior">
+                            <a class="page-link   text-warning border-warning fw-bold" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Anterior">
                                 &lsaquo;
                             </a>
                         </li>
@@ -67,7 +67,7 @@
                         {{-- "Three Dots" Separator --}}
                         @if (is_string($element))
                             <li class="page-item disabled" aria-disabled="true">
-                                <span class="page-link bg-black text-secondary border-warning fw-bold">
+                                <span class="page-link   text-secondary border-warning fw-bold">
                                     {{ $element }}
                                 </span>
                             </li>
@@ -84,7 +84,7 @@
                                     </li>
                                 @else
                                     <li class="page-item">
-                                        <a class="page-link bg-black text-warning border-warning fw-bold" href="{{ $url }}">
+                                        <a class="page-link   text-warning border-warning fw-bold" href="{{ $url }}">
                                             {{ $page }}
                                         </a>
                                     </li>
@@ -96,13 +96,13 @@
                     {{-- Next Page Link --}}
                     @if ($paginator->hasMorePages())
                         <li class="page-item">
-                            <a class="page-link bg-black text-warning border-warning fw-bold" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Siguiente">
+                            <a class="page-link   text-warning border-warning fw-bold" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Siguiente">
                                 &rsaquo;
                             </a>
                         </li>
                     @else
                         <li class="page-item disabled" aria-disabled="true" aria-label="Siguiente">
-                            <span class="page-link bg-black text-secondary border-warning fw-bold" aria-hidden="true">
+                            <span class="page-link   text-secondary border-warning fw-bold" aria-hidden="true">
                                 &rsaquo;
                             </span>
                         </li>

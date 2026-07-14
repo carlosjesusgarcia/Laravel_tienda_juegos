@@ -3,6 +3,8 @@
     code="ERROR 404"
     message="ARCHIVO CORRUPTO O NO ENCONTRADO"
 >
-    Parece que quieres acceder a algo que no tenemos.
-    Lo siento.
+    <p class="mb-0">
+        Parece que quieres acceder a algo que no tenemos.
+        Lo siento.
+    </p>
 </x-errors-layout>

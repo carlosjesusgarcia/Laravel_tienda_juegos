@@ -39,11 +39,11 @@
                 <table class="table table-dark table-bordered border-secondary align-middle mb-0">
                     <thead>
                         <tr>
-                            <th>Número</th>
-                            <th>Fecha</th>
-                            <th>Juegos</th>
-                            <th>Total</th>
-                            <th>Estado</th>
+                            <th scope="col">Número</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Juegos</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Estado</th>
                         </tr>
                     </thead>
 

@@ -1,9 +1,22 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-danger py-3">
+<nav class="navbar navbar-expand-lg navbar-dark border-bottom border-danger py-3">
     <div class="container">
-        <a class="navbar-brand text-danger fw-bold stranger-text" href="{{ route('home') }}">🕹️ Retro Games</a>
+        <a
+            class="navbar-brand text-danger fw-bold stranger-text"
+            href="{{ route('home') }}"
+        >
+            🕹️ Retro Games
+        </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Abrir o cerrar el menú de navegación"
+        >
+            <span class="navbar-toggler-icon" aria-hidden="true"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -58,9 +71,19 @@
                     @endif
 
                     <li class="nav-item ms-lg-2">
-                        <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                        <form
+                            action="{{ route('logout') }}"
+                            method="POST"
+                            class="m-0 p-0"
+                        >
                             @csrf
-                            <button type="submit" class="nav-link text-danger fw-bold bg-transparent border-0" style="cursor: pointer;">
+
+                            <button
+                                type="submit"
+                                class="nav-link text-danger fw-bold bg-transparent border-0"
+                                style="cursor: pointer;"
+                                aria-label="Cerrar sesión de {{ auth()->user()->name }}"
+                            >
                                 {{ auth()->user()->name }} (Cerrar Sesión)
                             </button>
                         </form>

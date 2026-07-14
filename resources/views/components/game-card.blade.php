@@ -1,25 +1,24 @@
-{{--
-/**
- * Archivo: game-card.blade.php
- * Función: Componente de interfaz encargado de renderizar de forma modular la información básica de un juego en las grillas del catálogo.
- *
- */
---}}
-@props(['juego'])
-
 <div class="col-6 col-md-4 col-lg-3">
     <article class="card h-100 vhs-card">
 
         @if($juego->portada !== null && \Storage::exists($juego->portada))
-            <img src="{{ \Storage::url($juego->portada) }}" class="card-img-top p-2" alt="{{ $juego->portada_descripcion ?? 'Portada del juego ' . $juego->titulo }}">
+            <img
+                src="{{ \Storage::url($juego->portada) }}"
+                class="card-img-top p-2"
+                alt="{{ $juego->portada_descripcion ?? 'Portada del juego ' . $juego->titulo }}"
+            >
         @else
-            <img src="{{ url('img/cartucho-vacio.jpg') }}" class="card-img-top p-2" alt="Cartucho sin portada disponible">
+            <img
+                src="{{ url('img/cartucho-vacio.jpg') }}"
+                class="card-img-top p-2"
+                alt="Cartucho sin portada disponible"
+            >
         @endif
 
-        <div class="card-body d-flex flex-column bg-black">
-            <h2 class="h5 card-title text-danger fw-bold">
+        <div class="card-body d-flex flex-column">
+            <h3 class="h5 card-title text-danger fw-bold">
                 {{ $juego->titulo }}
-            </h2>
+            </h3>
 
             <p class="card-text small text-secondary">
                 Año: {{ \Carbon\Carbon::parse($juego->fecha_lanzamiento)->format('Y') }}

@@ -1,14 +1,22 @@
 <x-principal-layout>
     <x-slot:title>Confirmar Compra</x-slot:title>
 
-    <article class="container py-5">
+    <section
+        class="container py-5"
+        aria-labelledby="titulo-confirmar-compra"
+    >
         <div class="mb-4">
-            <a href="{{ route('carrito.index') }}" class="btn btn-vhs-yellow">
-                <i class="bi bi-arrow-left"></i> [ VOLVER AL CARRITO ]
+            <a
+                href="{{ route('carrito.index') }}"
+                class="btn btn-vhs-yellow"
+            >
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                [ VOLVER AL CARRITO ]
             </a>
         </div>
 
         <h1
+            id="titulo-confirmar-compra"
             class="display-3 fw-bold text-uppercase mb-2"
             style="color: #ff3355; text-shadow: 0 0 10px rgba(255, 51, 85, 0.6);"
         >
@@ -21,9 +29,13 @@
 
         <section
             class="p-4 mb-5"
+            aria-labelledby="titulo-datos-comprador"
             style="background-color: #1a1a1a; border-left: 4px solid #ff8800;"
         >
-            <h2 class="h2 text-uppercase text-secondary fw-bold mb-3">
+            <h2
+                id="titulo-datos-comprador"
+                class="text-uppercase text-secondary fw-bold mb-3"
+            >
                 Datos del comprador
             </h2>
 
@@ -46,17 +58,20 @@
             </dl>
         </section>
 
-        <section aria-labelledby="resumen-pedido">
+        <section aria-labelledby="titulo-resumen-pedido">
             <h2
-                id="resumen-pedido"
-                class="h2 text-uppercase text-secondary fw-bold mb-4"
+                id="titulo-resumen-pedido"
+                class="text-uppercase text-secondary fw-bold mb-4"
             >
                 Resumen del pedido
             </h2>
 
             <div class="row g-4">
                 @foreach($productosCarrito as $producto)
-                    <article class="col-12">
+                    <article
+                        class="col-12"
+                        aria-labelledby="titulo-producto-{{ $producto['juego']->juego_id }}"
+                    >
                         <div class="vhs-card p-4 shadow-lg">
                             <div class="row align-items-center g-4">
                                 <div class="col-md-2">
@@ -74,7 +89,10 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <h3 class="h3 text-danger fw-bold text-uppercase mb-2">
+                                    <h3
+                                        id="titulo-producto-{{ $producto['juego']->juego_id }}"
+                                        class="h3 text-danger fw-bold text-uppercase mb-2"
+                                    >
                                         {{ $producto['juego']->titulo }}
                                     </h3>
 
@@ -124,11 +142,15 @@
 
         <section
             class="p-4 mt-5"
+            aria-labelledby="titulo-total-pedido"
             style="background-color: #1a1a1a; border-left: 4px solid #ff8800;"
         >
             <div class="row align-items-center g-4">
                 <div class="col-md-6">
-                    <h2 class="h3 text-secondary fw-bold text-uppercase mb-2">
+                    <h2
+                        id="titulo-total-pedido"
+                        class="h3 text-secondary fw-bold text-uppercase mb-2"
+                    >
                         Total del pedido
                     </h2>
 
@@ -138,11 +160,21 @@
                 </div>
 
                 <div class="col-md-6">
-                    <form action="{{ route('compras.guardar') }}" method="post">
+                    <form
+                        action="{{ route('compras.guardar') }}"
+                        method="post"
+                    >
                         @csrf
 
-                        <button type="submit" class="btn vhs-btn btn-lg w-100 py-3">
-                            <i class="bi bi-check-circle"></i> CONFIRMAR PEDIDO
+                        <button
+                            type="submit"
+                            class="btn vhs-btn btn-lg w-100 py-3"
+                        >
+                            <i
+                                class="bi bi-check-circle"
+                                aria-hidden="true"
+                            ></i>
+                            CONFIRMAR PEDIDO
                         </button>
                     </form>
                 </div>
@@ -153,5 +185,5 @@
             Al confirmar, el pedido se registrará con estado pendiente y recibirás
             el comprobante en tu correo electrónico.
         </p>
-    </article>
+    </section>
 </x-principal-layout>

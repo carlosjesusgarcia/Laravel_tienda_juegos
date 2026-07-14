@@ -1,17 +1,48 @@
 <x-principal-layout>
     <x-slot:title>Pedido #{{ $compra->compra_id }}</x-slot:title>
 
-    <article class="container py-5">
+    <section
+        class="container py-5"
+        aria-labelledby="titulo-detalle-pedido"
+    >
         <div class="mb-4">
-            <a href="{{ route('compras.index') }}" class="btn btn-vhs-yellow">
-                <i class="bi bi-arrow-left"></i> [ VOLVER A MIS COMPRAS ]
+            <a
+                href="{{ route('compras.index') }}"
+                class="btn btn-vhs-yellow"
+            >
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                [ VOLVER A MIS COMPRAS ]
             </a>
         </div>
 
+        <h1
+            id="titulo-detalle-pedido"
+            class="display-3 fw-bold text-uppercase mb-2"
+            style="color: #ff3355; text-shadow: 0 0 10px rgba(255, 51, 85, 0.6);"
+        >
+            Detalle del pedido
+        </h1>
+
+        <div class="d-flex align-items-center gap-3 mb-5">
+            <span class="text-secondary fw-bold">
+                NÚMERO: #{{ $compra->compra_id }}
+            </span>
+
+            <span class="badge bg-warning text-black fw-bold">
+                {{ strtoupper($compra->estado) }}
+            </span>
+        </div>
+
         <div class="row g-5">
-            <section class="col-md-5">
+            <section
+                class="col-md-5"
+                aria-labelledby="titulo-resumen-pedido"
+            >
                 <div class="vhs-card p-4 shadow-lg">
-                    <h2 class="h3 text-danger fw-bold text-uppercase mb-4">
+                    <h2
+                        id="titulo-resumen-pedido"
+                        class="h3 text-danger fw-bold text-uppercase mb-4"
+                    >
                         Pedido #{{ $compra->compra_id }}
                     </h2>
 
@@ -57,37 +88,25 @@
                 </div>
             </section>
 
-            <section class="col-md-7">
-                <h1
-                    class="display-3 fw-bold text-uppercase mb-2"
-                    style="color: #ff3355; text-shadow: 0 0 10px rgba(255, 51, 85, 0.6);"
-                >
-                    Detalle del pedido
-                </h1>
-
-                <div class="d-flex align-items-center gap-3 mb-4">
-                    <span class="text-secondary fw-bold">
-                        NÚMERO: #{{ $compra->compra_id }}
-                    </span>
-
-                    <span class="badge bg-warning text-black fw-bold">
-                        {{ strtoupper($compra->estado) }}
-                    </span>
-                </div>
-
+            <div class="col-md-7">
                 <section
                     class="p-4 mb-4"
+                    aria-labelledby="titulo-cartuchos-incluidos"
                     style="background-color: #1a1a1a; border-left: 4px solid #ff8800;"
                 >
                     <h2
-                        class="h2 text-uppercase text-secondary fw-bold mb-4"
+                        id="titulo-cartuchos-incluidos"
+                        class="text-uppercase text-secondary fw-bold mb-4"
                         style="letter-spacing: 2px;"
                     >
                         Cartuchos incluidos
                     </h2>
 
                     @foreach($compra->detalles as $detalle)
-                        <article class="pb-4 mb-4 border-bottom border-secondary">
+                        <article
+                            class="pb-4 mb-4 border-bottom border-secondary"
+                            aria-labelledby="titulo-detalle-{{ $detalle->compra_juego_id }}"
+                        >
                             <div class="row align-items-center g-3">
                                 @if(
                                     $detalle->juego !== null &&
@@ -105,7 +124,10 @@
                                 @endif
 
                                 <div class="col">
-                                    <h3 class="h4 text-danger fw-bold text-uppercase mb-3">
+                                    <h3
+                                        id="titulo-detalle-{{ $detalle->compra_juego_id }}"
+                                        class="h4 text-danger fw-bold text-uppercase mb-3"
+                                    >
                                         {{ $detalle->descripcion }}
                                     </h3>
 
@@ -160,11 +182,11 @@
                     @endforeach
                 </section>
 
-                <section class="row align-items-center mt-5">
+                <div class="row align-items-center mt-5">
                     <div class="col-sm-6">
-                        <div class="h1 fw-bold text-white mb-0">
+                        <p class="h1 fw-bold text-white mb-0">
                             ${{ number_format($compra->total, 0, ',', '.') }}
-                        </div>
+                        </p>
 
                         <small class="text-secondary text-uppercase">
                             Total del pedido
@@ -173,31 +195,40 @@
 
                     <div class="col-sm-6 mt-3 mt-sm-0">
                         <div class="vhs-btn text-center w-100 py-3">
-                            <i class="bi bi-envelope-check"></i>
+                            <i
+                                class="bi bi-envelope-check"
+                                aria-hidden="true"
+                            ></i>
                             COMPROBANTE ENVIADO
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <section class="mt-5 pt-4 border-top border-secondary">
+                <div class="mt-5 pt-4 border-top border-secondary">
                     <div class="row text-center text-secondary small">
                         <div class="col-4 border-end border-secondary">
                             PEDIDO<br>
-                            <b class="text-light">#{{ $compra->compra_id }}</b>
+                            <strong class="text-light">
+                                #{{ $compra->compra_id }}
+                            </strong>
                         </div>
 
                         <div class="col-4 border-end border-secondary">
                             ESTADO<br>
-                            <b class="text-light">{{ strtoupper($compra->estado) }}</b>
+                            <strong class="text-light">
+                                {{ strtoupper($compra->estado) }}
+                            </strong>
                         </div>
 
                         <div class="col-4">
                             COMPROBANTE<br>
-                            <b class="text-light">EMAIL</b>
+                            <strong class="text-light">
+                                EMAIL
+                            </strong>
                         </div>
                     </div>
-                </section>
-            </section>
+                </div>
+            </div>
         </div>
-    </article>
+    </section>
 </x-principal-layout>
