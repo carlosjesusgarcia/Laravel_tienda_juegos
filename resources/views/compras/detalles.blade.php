@@ -28,9 +28,19 @@
                 NÚMERO: #{{ $compra->compra_id }}
             </span>
 
-            <span class="badge bg-warning text-black fw-bold">
-                {{ strtoupper($compra->estado) }}
-            </span>
+            @if($compra->estado === 'completada')
+                <span class="badge bg-success fw-bold">
+                    COMPLETADA
+                </span>
+            @elseif($compra->estado === 'fallida')
+                <span class="badge bg-danger fw-bold">
+                    FALLIDA
+                </span>
+            @else
+                <span class="badge bg-warning text-black fw-bold">
+                    PENDIENTE
+                </span>
+            @endif
         </div>
 
         <div class="row g-5">
@@ -81,9 +91,19 @@
                     </dl>
 
                     <div class="mt-4 text-center">
-                        <span class="badge bg-warning text-black fw-bold px-3 py-2">
-                            ESTADO: {{ strtoupper($compra->estado) }}
-                        </span>
+                        @if($compra->estado === 'completada')
+                            <span class="badge bg-success fw-bold px-3 py-2">
+                                ESTADO: COMPLETADA
+                            </span>
+                        @elseif($compra->estado === 'fallida')
+                            <span class="badge bg-danger fw-bold px-3 py-2">
+                                ESTADO: FALLIDA
+                            </span>
+                        @else
+                            <span class="badge bg-warning text-black fw-bold px-3 py-2">
+                                ESTADO: PENDIENTE
+                            </span>
+                        @endif
                     </div>
                 </div>
             </section>
@@ -194,13 +214,31 @@
                     </div>
 
                     <div class="col-sm-6 mt-3 mt-sm-0">
-                        <div class="vhs-btn text-center w-100 py-3">
-                            <i
-                                class="bi bi-envelope-check"
-                                aria-hidden="true"
-                            ></i>
-                            COMPROBANTE ENVIADO
-                        </div>
+                        @if($compra->estado === 'completada')
+                            <div class="vhs-btn text-center w-100 py-3">
+                                <i
+                                    class="bi bi-envelope-check"
+                                    aria-hidden="true"
+                                ></i>
+                                COMPROBANTE ENVIADO
+                            </div>
+                        @else
+                            <a
+                                href="{{ route('compras.pago', $compra->compra_id) }}"
+                                class="btn vhs-btn w-100 py-3"
+                            >
+                                <i
+                                    class="bi bi-credit-card"
+                                    aria-hidden="true"
+                                ></i>
+
+                                @if($compra->estado === 'fallida')
+                                    REINTENTAR PAGO
+                                @else
+                                    CONTINUAR AL PAGO
+                                @endif
+                            </a>
+                        @endif
                     </div>
                 </div>
 
@@ -208,6 +246,7 @@
                     <div class="row text-center text-secondary small">
                         <div class="col-4 border-end border-secondary">
                             PEDIDO<br>
+
                             <strong class="text-light">
                                 #{{ $compra->compra_id }}
                             </strong>
@@ -215,6 +254,7 @@
 
                         <div class="col-4 border-end border-secondary">
                             ESTADO<br>
+
                             <strong class="text-light">
                                 {{ strtoupper($compra->estado) }}
                             </strong>
@@ -222,8 +262,13 @@
 
                         <div class="col-4">
                             COMPROBANTE<br>
+
                             <strong class="text-light">
-                                EMAIL
+                                @if($compra->estado === 'completada')
+                                    EMAIL
+                                @else
+                                    NO ENVIADO
+                                @endif
                             </strong>
                         </div>
                     </div>

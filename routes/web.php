@@ -108,6 +108,26 @@ Route::get('/compras/{id}', [\App\Http\Controllers\CompraController::class, 'det
 
 /**
  * |--------------------------------------------------------------------------
+ * | Rutas de Mercado Pago
+ * |--------------------------------------------------------------------------
+ * | Gestionan el proceso de pago y el retorno desde Mercado Pago Sandbox.
+ */
+
+Route::get('/compras/pago/exito', [\App\Http\Controllers\CompraController::class, 'pagoExito'])
+    ->name('compras.pago.exito');
+
+Route::get('/compras/pago/pendiente', [\App\Http\Controllers\CompraController::class, 'pagoPendiente'])
+    ->name('compras.pago.pendiente');
+
+Route::get('/compras/pago/fallido', [\App\Http\Controllers\CompraController::class, 'pagoFallido'])
+    ->name('compras.pago.fallido');
+
+Route::get('/compras/pago/{compra}', [\App\Http\Controllers\CompraController::class, 'pago'])
+    ->name('compras.pago')
+    ->middleware('auth');
+
+/**
+ * |--------------------------------------------------------------------------
  * | Rutas del Panel de Administración
  * |--------------------------------------------------------------------------
  * | Rutas restringidas para usuarios autenticados con rol administrador.

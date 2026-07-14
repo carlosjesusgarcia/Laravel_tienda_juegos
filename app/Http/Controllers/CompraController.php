@@ -2,7 +2,8 @@
 
 /**
  * Archivo: CompraController.php
- * Función: Confirma y registra las compras realizadas por los usuarios autenticados.
+ * Función: Confirma, registra y procesa las compras realizadas
+ * por los usuarios mediante Mercado Pago Sandbox.
  */
 
 namespace App\Http\Controllers;
@@ -15,6 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use MercadoPago\Client\Preference\PreferenceClient;
+use MercadoPago\MercadoPagoConfig;
 
 class CompraController extends Controller
 {
@@ -80,7 +83,7 @@ class CompraController extends Controller
     }
 
     /**
-     * Registra la compra y sus juegos en la base de datos.
+     * Registra la compra y sus juegos con estado pendiente.
      */
     public function guardar(Request $request)
     {
@@ -95,10 +98,6 @@ class CompraController extends Controller
                 );
         }
 
-        /*
-         * Los juegos y sus precios se consultan nuevamente
-         * desde la base de datos antes de registrar la compra.
-         */
         $juegos = Juego::whereIn(
             'juego_id',
             array_keys($carrito)
@@ -156,26 +155,174 @@ class CompraController extends Controller
             return $compra;
         });
 
-        /*
-         * El carrito se vacía únicamente después de que la compra
-         * y todos sus detalles fueron registrados correctamente.
-         */
-        $request->session()->forget('carrito');
+        return redirect()
+            ->route('compras.pago', $compra->compra_id);
+    }
 
-        $compra->load([
+    /**
+     * Crea la preferencia de pago y muestra el botón de Mercado Pago.
+     */
+    public function pago(Request $request, int $compra)
+    {
+        $compra = Compra::with([
             'usuario',
             'detalles.juego',
-        ]);
+        ])
+            ->where('compra_id', $compra)
+            ->where('user_fk', Auth::id())
+            ->firstOrFail();
 
-        Mail::to($compra->usuario->email)
-            ->send(new JuegoComprado($compra));
+        if($compra->estado === 'completada') {
+            return redirect()
+                ->route('compras.detalles', $compra->compra_id);
+        }
 
-        return redirect()
-            ->route('compras.detalles', $compra->compra_id)
-            ->with(
-                'feedback.message',
-                'La compra se registró correctamente y se envió el comprobante por correo electrónico.'
-            );
+        $items = [];
+
+        foreach($compra->detalles as $detalle) {
+            $items[] = [
+                'title' => $detalle->descripcion,
+                'quantity' => (int) $detalle->cantidad,
+                'unit_price' => (float) $detalle->precio_unitario,
+            ];
+        }
+
+        MercadoPagoConfig::setAccessToken(
+            config('mercadopago.access_token')
+        );
+
+        $mercadopagoPublicKey = config(
+            'mercadopago.public_key'
+        );
+
+        try {
+            $preferenceFactory = new PreferenceClient();
+
+            /*
+             * Esta URL debe coincidir con la URL HTTPS que muestra
+             * la terminal donde se ejecuta: ngrok http 8000
+             */
+            $urlNgrok = 'https://washday-visitor-gills.ngrok-free.dev';
+
+            $preference = $preferenceFactory->create([
+                'items' => $items,
+                'back_urls' => [
+                    'success' => $urlNgrok . '/compras/pago/exito',
+                    'pending' => $urlNgrok . '/compras/pago/pendiente',
+                    'failure' => $urlNgrok . '/compras/pago/fallido',
+                ],
+                'auto_return' => 'approved',
+                'external_reference' => (string) $compra->compra_id,
+            ]);
+
+            /*
+             * El carrito se vacía después de que Mercado Pago
+             * creó correctamente la preferencia.
+             */
+            $request->session()->forget('carrito');
+
+            return view('compras.pago', [
+                'compra' => $compra,
+                'preference' => $preference,
+                'mercadopagoPublicKey' => $mercadopagoPublicKey,
+            ]);
+        } catch(\MercadoPago\Exceptions\MPApiException $excepcion) {
+            return redirect()
+                ->route('compras.detalles', $compra->compra_id)
+                ->with(
+                    'feedback.message',
+                    'Mercado Pago rechazó la creación de la preferencia.'
+                );
+        } catch(\Exception $excepcion) {
+            return redirect()
+                ->route('compras.detalles', $compra->compra_id)
+                ->with(
+                    'feedback.message',
+                    'No se pudo conectar con Mercado Pago.'
+                );
+        }
+    }
+
+    /**
+     * Procesa el retorno cuando el pago fue aprobado.
+     */
+    public function pagoExito(Request $request)
+    {
+        $compraId = (int) $request->query('external_reference');
+        $estadoPago = $request->query('status');
+
+        $compra = Compra::with([
+            'usuario',
+            'detalles.juego',
+        ])
+            ->where('compra_id', $compraId)
+            ->firstOrFail();
+
+        if(
+            $estadoPago === 'approved' &&
+            $compra->estado !== 'completada'
+        ) {
+            $compra->estado = 'completada';
+            $compra->save();
+
+            Mail::to($compra->usuario->email)
+                ->send(new JuegoComprado($compra));
+        }
+
+        /*
+         * Ngrok recibe el retorno público de Mercado Pago.
+         * Después volvemos a 127.0.0.1 para recuperar la sesión,
+         * los estilos y las rutas normales del proyecto local.
+         */
+        return redirect()->away(
+            'http://127.0.0.1:8000/compras/' . $compra->compra_id
+        );
+    }
+
+    /**
+     * Procesa el retorno cuando el pago queda pendiente.
+     */
+    public function pagoPendiente(Request $request)
+    {
+        $compraId = (int) $request->query('external_reference');
+
+        $compra = Compra::with([
+            'detalles.juego',
+        ])
+            ->where('compra_id', $compraId)
+            ->firstOrFail();
+
+        if($compra->estado !== 'completada') {
+            $compra->estado = 'pendiente';
+            $compra->save();
+        }
+
+        return redirect()->away(
+            'http://127.0.0.1:8000/compras/' . $compra->compra_id
+        );
+    }
+
+    /**
+     * Procesa el retorno cuando el pago falla o es rechazado.
+     */
+    public function pagoFallido(Request $request)
+    {
+        $compraId = (int) $request->query('external_reference');
+
+        $compra = Compra::with([
+            'detalles.juego',
+        ])
+            ->where('compra_id', $compraId)
+            ->firstOrFail();
+
+        if($compra->estado !== 'completada') {
+            $compra->estado = 'fallida';
+            $compra->save();
+        }
+
+        return redirect()->away(
+            'http://127.0.0.1:8000/compras/' . $compra->compra_id
+        );
     }
 
     /**

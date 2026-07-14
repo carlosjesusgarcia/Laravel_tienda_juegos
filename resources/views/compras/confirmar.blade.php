@@ -24,7 +24,7 @@
         </h1>
 
         <p class="text-secondary fw-bold mb-5">
-            Revisá los datos del pedido antes de registrarlo.
+            Revisá los datos del pedido antes de continuar al pago.
         </p>
 
         <section
@@ -171,10 +171,10 @@
                             class="btn vhs-btn btn-lg w-100 py-3"
                         >
                             <i
-                                class="bi bi-check-circle"
+                                class="bi bi-credit-card"
                                 aria-hidden="true"
                             ></i>
-                            CONFIRMAR PEDIDO
+                            CONTINUAR AL PAGO
                         </button>
                     </form>
                 </div>
@@ -182,8 +182,9 @@
         </section>
 
         <p class="text-secondary small mt-4 mb-0">
-            Al confirmar, el pedido se registrará con estado pendiente y recibirás
-            el comprobante en tu correo electrónico.
+            Al continuar, el pedido se registrará con estado pendiente y serás
+            dirigido a Mercado Pago. El comprobante se enviará cuando el pago
+            sea aprobado.
         </p>
     </section>
 </x-principal-layout>
