@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedTinyInteger('rol_fk');
 
-            $table->foreign('rol_fk')->references('rol_id')->on('roles');
+            $table->foreign('rol_fk')
+                ->references('rol_id')
+                ->on('roles');
         });
     }
 

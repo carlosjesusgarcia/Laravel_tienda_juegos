@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         /*
-            Schema::table() es el método que permite editar lo que es una tabla.
-            Lo que sería un ALTER TABLE.
+            Schema::table() permite modificar una tabla existente.
+            En SQL, esta operación equivale a ALTER TABLE.
         */
         Schema::table('juegos', function (Blueprint $table) {
             $table->string('portada')->nullable();

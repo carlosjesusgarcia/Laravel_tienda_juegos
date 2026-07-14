@@ -16,8 +16,13 @@ return new class extends Migration
             $table->unsignedSmallInteger('genero_fk');
             $table->timestamps();
 
-            $table->foreign('juego_fk')->references('juego_id')->on('juegos');
-            $table->foreign('genero_fk')->references('genero_id')->on('generos');
+            $table->foreign('juego_fk')
+                ->references('juego_id')
+                ->on('juegos');
+
+            $table->foreign('genero_fk')
+                ->references('genero_id')
+                ->on('generos');
 
             $table->primary(['juego_fk', 'genero_fk']);
         });

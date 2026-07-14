@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::table('juegos', function (Blueprint $table) {
             // Definimos la FK para ratings.
-            // Primero, creamos el campo. Como sabemos, debe tener el mismo dominio que la PK que referencia.
+            // Primero, creamos el campo con el mismo dominio que la PK referenciada.
             $table->unsignedTinyInteger('rating_fk');
 
-            // La declaramos como FK.
-            $table->foreign('rating_fk')->references('rating_id')->on('ratings');
+            // Declaramos la clave foránea.
+            $table->foreign('rating_fk')
+                ->references('rating_id')
+                ->on('ratings');
         });
     }
 
